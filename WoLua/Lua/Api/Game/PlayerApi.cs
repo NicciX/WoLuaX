@@ -69,7 +69,12 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 		return "Player not found";
 	}
 
+	
+
+
 	public unsafe string SetRot(float p) => this.SetRotation(p);
+
+	//public double? RotationDegrees => this.Entity.RotationDegrees;
 
 
 	[LuaDoc("This provides a `MountData` wrapper object around the currently-logged-in player's mount (or around nothing) _at the time of access_.",
@@ -287,8 +292,8 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 
 	[LuaPlayerDoc("The current character's rotation in radians, ranging from 0 to 2pi.",
 		"This property is shorthand for `.Entity.RotationRadians`.")]
+	//public double? RotationRadians => this.Entity.RotationRadians;
 	public double? RotationRadians => this.Entity.RotationRadians;
-
 	[LuaPlayerDoc("The current character's rotation in degrees, ranging from 0 to 360.",
 		"This property is shorthand for `.Entity.RotationDegrees`.")]
 	public double? RotationDegrees => this.Entity.RotationDegrees;

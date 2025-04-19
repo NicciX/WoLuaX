@@ -207,7 +207,7 @@ public sealed record class EntityWrapper(IGameObject? Entity): IWorldObjectWrapp
 		}
 	}
 
-	public double? RotationRadians => this.Entity?.Rotation is float rad ? rad + Math.PI : null;
+	public double? RotationRadians => this.Entity?.Rotation is float rad ? rad : null;
 	public double? RotationDegrees => this.RotationRadians is double rad ? rad * 180 / Math.PI : null;
 
 	#endregion
