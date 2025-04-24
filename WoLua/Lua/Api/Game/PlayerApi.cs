@@ -24,6 +24,8 @@ using NicciX.WoLua.Lua.Docs;
 
 using Status = Lumina.Excel.Sheets.Status;
 
+
+
 namespace NicciX.WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
@@ -225,11 +227,13 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 		"Only guaranteed to be valid if the player is on a DoL class. Otherwise, the value is indeterminate and may be meaningless.",
 		"This property is shorthand for `.Entity.MaxGp`.")]
 	public uint? MaxGp => this.Entity.MaxGp;
-	public unsafe uint GetGil() => InventoryManager.Instance()->GetGil(); //added by Nicci
-
 	public unsafe uint EntityId => Service.ClientState.LocalPlayer!.EntityId;
 
-	
+	//[LuaPlayerDoc("The current character's _current_ piety points.",
+		//"Only guaranteed to be valid if the player is on a DoW class. Otherwise, the value is indeterminate and may be meaningless.",
+		//"This property is shorthand for `.Entity.Piety`.")]
+	//public uint? Piety => this.Entity.Piety;
+
 
 	//public unsafe bool StatusFlags(uint flag) => Service.ClientState.LocalPlayer!.StatusFlags.HasFlag((StatusFlags)flag);
 
@@ -359,11 +363,14 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 	public bool? Flying => this.Loaded
 		? Service.Condition[ConditionFlag.InFlight]
 		: null;
-	//Added Nicci
+
+	//Added by Nicci ---------
 	[LuaPlayerDoc("Whether the current character is considered to be sitting.")]
 	public bool? Sitting => this.Loaded
 		? Service.Condition[ConditionFlag.InThatPosition]
 		: null;
+	[LuaPlayerDoc("Returns the players gil.")]
+	public unsafe uint GetGil() => InventoryManager.Instance()->GetGil(); //added by Nicci
 	[LuaPlayerDoc("Whether the current character is emoting.")]
 	public bool? Emoting => this.Loaded
 		? Service.Condition[ConditionFlag.Emoting]
@@ -392,10 +399,10 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 	public bool? EditingPortrait => this.Loaded
 		? Service.Condition[ConditionFlag.EditingPortrait]
 		: null;
-
+	[LuaPlayerDoc("Whether the current character is afk.")]
 	public bool? IsAfk => this.Loaded
 		? (Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 17) : null;
-
+	[LuaPlayerDoc("Whether the current character is waiting for duty.")]
 	public bool? WfDuty => this.Loaded
 		? (Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 25) : null;
 
@@ -426,6 +433,8 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 
 		return statusID != default;
 	}
+	//public string? Race => this.Loaded
+		//?Service.ClientState.LocalPlayer!.Customize.
 
 	//Game.Player.Equipped.Head.DyeA
 	//public unsafe uint? EquippedHead => this.Loaded

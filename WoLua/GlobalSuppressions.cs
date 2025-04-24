@@ -6,5 +6,5 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "it's a stupid rule")]
-[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:NicciX.WoLua.IPC.WoLuaIPC.RegisterFunctions")]
-[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:NicciX.WoLua.IPC.WoLuaIPC.NewChat(System.String,System.String,System.String)~System.Object")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+[assembly: SuppressMessage("Style", "IDE0008:Use explicit type", Justification = "<Pending>")]

@@ -69,6 +69,8 @@ public class WoLuaIpc : IDisposable {
 		WoLuaApi.Chn = chn;
 		WoLuaApi.Match = match;
 		WoLuaApi.Stamp = (uint)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+		Service.Log.Information($"ChatMatch Received: [{chn}] : [{sender}] : {msg}");
+		Service.Log.Information($"ChatMatch Received :: Match: {match}");
 		return true;
 	}
 

@@ -137,6 +137,7 @@ public class Plugin: IDalamudPlugin {
 	private void delayedPluginSetup() {
 		PlayerApi.InitialiseEmotes();
 		WeatherWrapper.LoadGameData();
+		//EquipApi.LoadSlots();
 		MountWrapper.LoadGameData();
 		Service.ScriptManager.Rescan();
 		Service.DocumentationGenerator.Run();

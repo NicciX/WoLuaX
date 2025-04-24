@@ -6,9 +6,9 @@
 		<Description>Warrior of... Lua? Write your own chat commands in lua for FFXIV/Dalamud!</Description>
 		<Copyright>Copyleft VariableVixen 2022</Copyright>
 		<LangVersion>preview</LangVersion>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<Platforms>x64</Platforms>
 	</PropertyGroup>
-
-	<Import Project="dalamud.props" />
 
 	<ItemGroup>
 		<PackageReference Include="ECommons" Version="2.0.0.4" />

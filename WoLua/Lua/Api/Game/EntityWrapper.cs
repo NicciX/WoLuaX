@@ -5,8 +5,11 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 
+using ECommons.DalamudServices;
+
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 
+using Lumina.Excel;
 using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
@@ -37,6 +40,7 @@ public sealed record class EntityWrapper(IGameObject? Entity): IWorldObjectWrapp
 
 	public bool Exists => this.Entity is not null && this.Entity.IsValid() && this.Entity.ObjectKind is not ObjectKind.None;
 
+	private readonly ExcelSheet<Race> race = Service.DataManager.GetExcelSheet<Race>()!;
 	public string? Type => this ? this.Entity!.ObjectKind.ToString() : null;
 
 	[MoonSharpUserDataMetamethod(Metamethod.Stringify)]
@@ -111,6 +115,24 @@ public sealed record class EntityWrapper(IGameObject? Entity): IWorldObjectWrapp
 
 	#endregion
 
+	#region Titles
+	public unsafe string? Title => this.IsPlayer ? this.TitleText : null;
+	public string? TitlePrefix => this.IsPlayer && this.playerTitle?.IsPrefix == true ? this.TitleText : null;
+	public string? TitleSuffix => this.IsPlayer && this.playerTitle?.IsPrefix == false ? this.TitleText : null;
+	public string? TitleFull => this.IsPlayer ? this.TitleText : null;
+	public string? TitleFullPrefix => this.IsPlayer && this.playerTitle?.IsPrefix == true ? this.TitleText : null;
+	public string? TitleFullSuffix => this.IsPlayer && this.playerTitle?.IsPrefix == false ? this.TitleText : null;
+	public string? TitleFullName => this.IsPlayer ? $"{this.TitleText} {this.Name}" : null;
+	public string? TitleFullPrefixName => this.IsPlayer && this.playerTitle?.IsPrefix == true ? $"{this.TitleText} {this.Name}" : null;
+	public string? TitleFullSuffixName => this.IsPlayer && this.playerTitle?.IsPrefix == false ? $"{this.TitleText} {this.Name}" : null;
+	public string? TitleFullNameNoPrefix => this.IsPlayer ? $"{this.Name} {this.TitleText}" : null;
+	public string? TitleFullPrefixNameNoPrefix => this.IsPlayer && this.playerTitle?.IsPrefix == true ? $"{this.Name} {this.TitleText}" : null;
+	#endregion
+
+	#region Stats
+	
+
+	#endregion
 	#region Worlds
 
 	public ushort? HomeWorldId => this.IsPlayer && this.Entity is IPlayerCharacter p ? (ushort)p.HomeWorld.Value.RowId : null;
