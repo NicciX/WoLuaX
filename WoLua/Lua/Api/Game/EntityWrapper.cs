@@ -60,6 +60,8 @@ public sealed record class EntityWrapper(IGameObject? Entity): IWorldObjectWrapp
 
 	#region Player display
 
+	//public EquipApi Equipped { get; set; } = null!;
+
 	public string? Name => this
 		? this.Entity?.Name?.TextValue ?? string.Empty
 		: null;
@@ -130,7 +132,22 @@ public sealed record class EntityWrapper(IGameObject? Entity): IWorldObjectWrapp
 	#endregion
 
 	#region Stats
-	
+
+	#region Custom
+	public uint Height => this && this.Entity is ICharacter self ? (uint)self.Customize[(int)CustomizeIndex.Height] : 0;
+	//public string NameDay => this && this.Entity is ICharacter self ? (uint)self. : 0;
+	public uint BustSize => this && this.Entity is ICharacter self ? (uint)self.Customize[(int)CustomizeIndex.BustSize] : 0;
+	public uint HairStyle => this && this.Entity is ICharacter self ? (uint)self.Customize[(int)CustomizeIndex.HairStyle] : 0;
+	public uint RaceId => this && this.Entity is ICharacter self ? (uint)self.Customize[(int)CustomizeIndex.Race] : 0;
+
+	public uint TribeId => this && this.Entity is ICharacter self ? (uint)self.Customize[(int)CustomizeIndex.Tribe] : 0;
+
+	//public string? Race => this && this.Entity is ICharacter self ? this.Service.DataManager.GetExcelSheet<Race>()!.GetRow(this.GlamId).Name.ExtractText();
+	public unsafe string? Race => Service.DataManager.GetExcelSheet<Race>()!.GetRow(this.RaceId).Feminine.ToString();
+
+	public unsafe string? Tribe => Service.DataManager.GetExcelSheet<Tribe>()!.GetRow(this.TribeId).Feminine.ToString();
+
+	#endregion
 
 	#endregion
 	#region Worlds

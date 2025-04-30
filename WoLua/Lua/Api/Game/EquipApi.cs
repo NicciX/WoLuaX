@@ -60,7 +60,7 @@ public class EquipApi: ApiBase {
 	private static bool slotsLoaded = false;
 	public string LoadSlots() {
 		if (slotsLoaded) {
-			return "Slots already loaded";
+			//return "Slots already loaded";
 		}
 		this.Head.Name = this.Head.SetName("Head");
 		this.Body.Name = this.Body.SetName("Body");

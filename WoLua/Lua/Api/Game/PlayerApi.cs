@@ -71,7 +71,7 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 		return "Player not found";
 	}
 
-	
+
 
 
 	public unsafe string SetRot(float p) => this.SetRotation(p);
@@ -230,8 +230,8 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 	public unsafe uint EntityId => Service.ClientState.LocalPlayer!.EntityId;
 
 	//[LuaPlayerDoc("The current character's _current_ piety points.",
-		//"Only guaranteed to be valid if the player is on a DoW class. Otherwise, the value is indeterminate and may be meaningless.",
-		//"This property is shorthand for `.Entity.Piety`.")]
+	//"Only guaranteed to be valid if the player is on a DoW class. Otherwise, the value is indeterminate and may be meaningless.",
+	//"This property is shorthand for `.Entity.Piety`.")]
 	//public uint? Piety => this.Entity.Piety;
 
 
@@ -365,6 +365,9 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 		: null;
 
 	//Added by Nicci ---------
+	
+
+
 	[LuaPlayerDoc("Whether the current character is considered to be sitting.")]
 	public bool? Sitting => this.Loaded
 		? Service.Condition[ConditionFlag.InThatPosition]
@@ -409,8 +412,7 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 	public bool? IsPvP => this.Loaded
 		? (Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 13) : null;
 
-	public bool? WellFed => this.Loaded
-		? Service.DataManager.GetExcelSheet<Status>()?.GetRow(48).Name == "Well Fed" : null;
+	public bool? WellFed => this.HasStatus("Well Fed") ?? null;
 
 	public unsafe bool? HasStatus(string statusName) {
 		statusName = statusName.ToLowerInvariant();
@@ -434,15 +436,14 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 		return statusID != default;
 	}
 	//public string? Race => this.Loaded
-		//?Service.ClientState.LocalPlayer!.Customize.
-
+	//? Service.ClientState.LocalPlayer!.Customize-> : "Indeterminate";
 	//Game.Player.Equipped.Head.DyeA
 	//public unsafe uint? EquippedHead => this.Loaded
 	//? InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(2)->ItemId : 0;
 	//public unsafe uint? GlammedHead => this.Loaded
 	//? InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(2)->GlamourId : 0;
 
-
+	//public string? Race => this.race.GetRow(this.IsPlayer ? this.);
 
 
 	[LuaPlayerDoc("Whether the current character is swimming in water. This is not the same as diving UNDER water.")]
