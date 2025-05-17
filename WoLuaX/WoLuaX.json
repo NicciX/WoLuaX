@@ -1,0 +1,7 @@
+{
+	"Name": "WoLuaX",
+	"Author": "VariableVixen, NicciX",
+	"Description": "Write custom chat commands by creating lua scripts",
+	"RepoUrl": "https://github.com/NicciX/WoLuaX",
+	"Punchline": "Write your own custom chat commands in lua!"
+}
