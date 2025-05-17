@@ -1,8 +1,10 @@
 using System;
 
-using NicciX.WoLua.Constants;
+using WoLua.Lua;
 
-namespace NicciX.WoLua.Lua.Actions;
+using WoLua.Constants;
+
+namespace WoLua.Lua.Actions;
 
 public class PauseAction: ScriptAction {
 	public uint Delay { get; }

@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 
-using NicciX.WoLua;
 
-
-namespace NicciX.WoLua.Api;
+namespace WoLua.Api;
 
 public interface IWoLuaApi
 {

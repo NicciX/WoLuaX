@@ -6,10 +6,11 @@ using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Docs;
+using WoLua.Lua.Docs;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+using WoLua.Constants;
+
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember(nameof(Equals))]

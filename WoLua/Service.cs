@@ -5,14 +5,13 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Game;
-using NicciX.WoLua.Lua.Docs;
-using NicciX.WoLua.Ipc;
-
 using XivCommon;
+using WoLua.Ipc;
+using WoLua.Constants;
+using WoLua.Game;
+using WoLua.Lua.Docs;
 
-namespace NicciX.WoLua;
+namespace WoLua;
 
 internal class Service {
 

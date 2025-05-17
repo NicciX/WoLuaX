@@ -5,7 +5,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
-namespace NicciX.WoLua;
+namespace WoLua;
 
 public class Hooks: IDisposable {
 	private bool disposed;
@@ -16,7 +16,7 @@ public class Hooks: IDisposable {
 			if (pronouns is null)
 				return null;
 			GameObject* actor = pronouns->UiMouseOverTarget;
-			return actor is null ? null : Service.Objects.CreateObjectReference((IntPtr)actor);
+			return actor is null ? null : Service.Objects.CreateObjectReference((nint)actor);
 		}
 	}
 

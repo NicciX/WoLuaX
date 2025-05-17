@@ -3,10 +3,12 @@ using System.Collections.ObjectModel;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Api;
+using WoLua.Lua;
 
-namespace NicciX.WoLua.Lua.Actions;
+using WoLua.Constants;
+using WoLua.Lua.Api;
+
+namespace WoLua.Lua.Actions;
 
 public class CallbackAction: ScriptAction {
 	public DynValue Function { get; }

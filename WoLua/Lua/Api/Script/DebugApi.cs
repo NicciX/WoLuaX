@@ -4,10 +4,14 @@ using System.Linq;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Serialization.Json;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Docs;
+using WoLua.Lua;
+using WoLua.Lua.Docs;
 
-namespace NicciX.WoLua.Lua.Api.Script;
+using WoLua;
+using WoLua.Constants;
+using WoLua.Lua.Api;
+
+namespace WoLua.Lua.Api.Script;
 
 [MoonSharpUserData]
 public class DebugApi: ApiBase {

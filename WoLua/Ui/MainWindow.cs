@@ -3,10 +3,11 @@ using System.IO;
 
 using ImGuiNET;
 
-using NicciX.WoLua.Lua;
-using NicciX.WoLua.Lua.Docs;
+using WoLua.Lua;
 
-namespace NicciX.WoLua.Ui;
+using WoLua.Lua.Docs;
+
+namespace WoLua.Ui;
 
 internal class MainWindow: BaseWindow {
 	public const ImGuiWindowFlags CreationFlags = ImGuiWindowFlags.None
@@ -95,9 +96,7 @@ internal class MainWindow: BaseWindow {
 		if (Section("Documentation")) {
 			Textline($"Since the documentation for writing {Plugin.Name} scripts is necessarily so extensive, it's located online, on the plugin repository.");
 
-			if (ImGui.Button("Open documentation page")) {
-				Process.Start(new ProcessStartInfo("https://github.com/NicciX/WoLua/tree/master/docs#wolua-scripting") { UseShellExecute = true });
-			}
+			if (ImGui.Button("Open documentation page")) 				Process.Start(new ProcessStartInfo("https://github.com/NicciX/WoLua/tree/master/docs#wolua-scripting") { UseShellExecute = true });
 
 			Textline($"However, if you're writing your own scripts, you can use \"{Plugin.Command} api\" to generate an API definition file in {LuadocGenerator.ApiDefinitionFilePath}"
 				+ " which can be used as a reference in your IDE to provide documentation, autocompletion, type checking, etc. You can simply re-run the command to regenerate the file"

@@ -1,8 +1,8 @@
 using Dalamud.Configuration;
 
-using NicciX.WoLua.Constants;
+using WoLua.Constants;
 
-namespace NicciX.WoLua;
+namespace WoLua;
 
 internal class PluginConfiguration: IPluginConfiguration {
 	public static class Defaults {

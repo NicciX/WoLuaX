@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NicciX.WoLua.Utils;
+namespace WoLua.Utils;
 
 public class FlagMap: Dictionary<string, bool> {
 	public new bool this[string key] {

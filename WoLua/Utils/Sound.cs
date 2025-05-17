@@ -1,4 +1,4 @@
-namespace NicciX.WoLua.Utils;
+namespace WoLua.Utils;
 
 public enum Sound: byte {
 	None = 0x00,

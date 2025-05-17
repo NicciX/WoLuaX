@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using MoonSharp.Interpreter;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember(nameof(Equals))]

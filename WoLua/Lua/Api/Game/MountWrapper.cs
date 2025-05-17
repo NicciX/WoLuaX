@@ -6,9 +6,9 @@ using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Constants;
+using WoLua.Constants;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember("<Clone>$")]

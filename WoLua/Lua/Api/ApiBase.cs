@@ -8,11 +8,13 @@ using System.Xml.Linq;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Serialization.Json;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Docs;
-using NicciX.WoLua.Ui.Chat;
+using WoLua.Lua;
+using WoLua.Lua.Docs;
 
-namespace NicciX.WoLua.Lua.Api;
+using WoLua.Constants;
+using WoLua.Ui.Chat;
+
+namespace WoLua.Lua.Api;
 
 public abstract class ApiBase: IDisposable {
 	private const BindingFlags AllInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;

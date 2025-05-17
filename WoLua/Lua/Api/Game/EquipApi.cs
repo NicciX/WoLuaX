@@ -1,6 +1,12 @@
 using System;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using FFXIVClientStructs.FFXIV.Client.Game.Control;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
+using FFXIVClientStructs.FFXIV.Client.UI;
 
 using MoonSharp.Interpreter;
 using ECommons.Logging;
@@ -12,8 +18,10 @@ using System.Linq;
 //using static FFXIVClientStructs.FFXIV.Client.Graphics.Render.ModelRenderer;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Game.Addon.Lifecycle;
+using System.ComponentModel;
+using WoLua.Lua;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 public class EquipApi: ApiBase {
@@ -80,15 +88,16 @@ public class EquipApi: ApiBase {
 	//public unsafe string? HN => this.headName;
 
 	private static int EquipAttemptLoops = 0;
-	public unsafe void Equip(uint itemID) {
+	public unsafe void Equip(uint itemID, InventoryType? container = null, int? slot = null) {
 		if (Inventory.HasItemEquipped(itemID))
 			return;
 
 		var pos = Inventory.GetItemLocationInInventory(itemID, Inventory.Equippable);
-		if (pos == null) {
-			//Service.Log.Error($"Failed to find item {this.GetRow<Item>(itemID)?.Name} (ID: {itemID}) in inventory");
+		if (pos == null) 			//Service.Log.Error($"Failed to find item {this.GetRow<Item>(itemID)?.Name} (ID: {itemID}) in inventory");
 			return;
-		}
+
+		container ??= pos.Value.inv;
+		slot ??= pos.Value.slot;
 
 		var agentId = Inventory.Armory.Contains(pos.Value.inv) ? AgentId.ArmouryBoard : AgentId.Inventory;
 		var addonId = AgentModule.Instance()->GetAgentByInternalId(agentId)->GetAddonId();
@@ -99,10 +108,7 @@ public class EquipApi: ApiBase {
 		if (contextMenu != null) {
 			for (var i = 0; i < contextMenu->AtkValuesCount; i++) {
 				var firstEntryIsEquip = ctx->EventIds[i] == 25; // i'th entry will fire eventid 7+i; eventid 25 is 'equip'
-				if (firstEntryIsEquip) {
-					Service.Log.Debug($"Equipping item #{itemID} from {pos.Value.inv} @ {pos.Value.slot}, index {i}");
-					//Callback.Fire(contextMenu, true, 0, i - 7, 0, 0, 0); // p2=-1 is close, p2=0 is exec first command
-				}
+				if (firstEntryIsEquip) 					Service.Log.Debug($"Equipping item #{itemID} from {pos.Value.inv} @ {pos.Value.slot}, index {i}");
 			}
 			//Callback.Fire(contextMenu, true, 0, -1, 0, 0, 0);
 			EquipAttemptLoops++;

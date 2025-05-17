@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace NicciX.WoLua.Utils;
+namespace WoLua.Utils;
 
 public static class ArgumentParser {
 

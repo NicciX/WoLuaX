@@ -4,13 +4,13 @@ using Dalamud.Game.ClientState.Fates;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Docs;
+using WoLua.Lua.Docs;
+using WoLua.Constants;
 
 using Fate = Dalamud.Game.ClientState.Fates.IFate;
 using FateContext = FFXIVClientStructs.FFXIV.Client.Game.Fate.FateContext;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember(nameof(WorldFate))]
@@ -20,7 +20,7 @@ namespace NicciX.WoLua.Lua.Api.Game;
 public sealed record class FateWrapper(Fate? WorldFate): IWorldObjectWrapper {
 	public static readonly FateWrapper Empty = new((Fate?)null);
 
-	internal unsafe FateContext* Struct => this.Valid ? ((FateContext*)this.WorldFate!.Address) : null;
+	internal unsafe FateContext* Struct => this.Valid ? (FateContext*)this.WorldFate!.Address : null;
 
 	[LuaDoc("Whether this FATE is a valid object in the game's memory. If this is false, this wrapper is meaningless.")]
 	public bool Valid => this.WorldFate is Fate fate && Service.ClientState.LocalPlayer?.IsValid() is true;

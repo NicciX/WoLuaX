@@ -1,6 +1,6 @@
 using System;
 
-namespace NicciX.WoLua.Lua.Api;
+namespace WoLua.Lua.Api;
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 internal class WipeOnDisposeAttribute: Attribute {

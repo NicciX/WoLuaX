@@ -1,6 +1,6 @@
 using System;
 
-namespace NicciX.WoLua.Lua;
+namespace WoLua.Lua;
 
 [AttributeUsage(AttributeTargets.Property)]
 internal class LuaGlobalAttribute: Attribute {

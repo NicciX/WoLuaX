@@ -11,14 +11,15 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
 using Lumina.Excel.Sheets;
 
-using NicciX.WoLua.Attributes;
-using NicciX.WoLua.Chat;
-using NicciX.WoLua.Utils;
+using WoLua.Attributes;
+
+using WoLua.Chat;
+using WoLua.Utils;
 
 using CSFW = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 
 
-namespace NicciX.WoLua;
+namespace WoLua;
 
 [Command("/useitem", "/use", "/item")]
 [Summary("Use an item from your inventory by numeric ID or by name (case-insensitive full match)")]

@@ -7,11 +7,13 @@ using System.Text.RegularExpressions;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Api;
-using NicciX.WoLua.Ui.Chat;
+using WoLua;
+using WoLua.Constants;
+using WoLua.Lua;
+using WoLua.Lua.Api;
+using WoLua.Ui.Chat;
 
-namespace NicciX.WoLua.Lua;
+namespace WoLua.Lua;
 
 // Declared as `partial` because of the compile-time Regex generation feature
 public sealed partial class ScriptContainer: IDisposable {

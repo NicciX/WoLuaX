@@ -5,9 +5,13 @@ using Dalamud.Plugin;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Lua.Docs;
+using WoLua.Lua;
+using WoLua.Lua.Docs;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+using WoLua;
+using WoLua.Lua.Api;
+
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 public class DalamudApi: ApiBase {

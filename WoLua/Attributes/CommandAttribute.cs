@@ -1,6 +1,6 @@
 using System;
 
-namespace NicciX.WoLua.Attributes;
+namespace WoLua.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 internal class CommandAttribute(string command, params string[] aliases): Attribute {

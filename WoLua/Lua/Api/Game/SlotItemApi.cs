@@ -1,36 +1,19 @@
+using ECommons.Automation;
+
 using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using FFXIVClientStructs.FFXIV.Component.GUI;
 
-using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.ClientState.Objects.Enums;
-using Dalamud.Game.Inventory;
-
-using Lumina;
-using Lumina.Data;
-using Lumina.Data.Structs.Excel;
-using Lumina.Excel;
-using Lumina.Excel.Exceptions;
-using System.Linq;
-
-using MoonSharp.Interpreter;
-
-using NicciX.WoLua;
-using NicciX.WoLua.Api;
-using NicciX.WoLua.Constants;
-
-using FFXIVClientStructs;
-using Dalamud.Game;
 using Lumina.Excel.Sheets;
-using System.Reflection;
+using Lumina.Excel;
 using System.Collections.Generic;
-using ECommons.DalamudServices;
-using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using MoonSharp.Interpreter;
+using WoLua.Lua;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
-public class SlotItemApi : ApiBase {
+public unsafe class SlotItemApi : ApiBase {
 	[MoonSharpHidden]
 	internal SlotItemApi(ScriptContainer source) : base(source) { }
 	
@@ -41,7 +24,7 @@ public class SlotItemApi : ApiBase {
 
 	private readonly ExcelSheet<Stain> stain = Service.DataManager.GetExcelSheet<Stain>()!;
 
-	public Inventory invHandler = new Inventory();
+	public Inventory invHandler = new();
 
 	//private readonly TypeInfo tinfo = typeof(SlotItemApi).GetTypeInfo();
 
@@ -122,6 +105,46 @@ public class SlotItemApi : ApiBase {
 		}
 		return $"Unable to remove {this.ItemName}.";
 	}
+
+
+	private static int EquipAttemptLoops = 0;
+	public static void Equip(uint itemID, InventoryType? container = null, int? slot = null) {
+		if (Inventory.HasItemEquipped(itemID))
+			return;
+
+		var pos = Inventory.GetItemLocationInInventory(itemID, Inventory.Equippable);
+		if (pos == null) {
+			Service.Log.Error($"Failed to find item (ID: {itemID}) in inventory");
+			return;
+		}
+
+		container ??= pos.Value.inv;
+		slot ??= pos.Value.slot;
+
+		var agentId = Inventory.Armory.Contains(container.Value) ? AgentId.ArmouryBoard : AgentId.Inventory;
+		var addonId = AgentModule.Instance()->GetAgentByInternalId(agentId)->GetAddonId();
+		var ctx = AgentInventoryContext.Instance();
+		ctx->OpenForItemSlot(container.Value, slot.Value, addonId);
+
+		var contextMenu = (AtkUnitBase*)Service.GameGui.GetAddonByName("ContextMenu");
+		if (contextMenu != null) {
+			for (var i = 0; i < contextMenu->AtkValuesCount; i++) {
+				var firstEntryIsEquip = ctx->EventIds[i] == 25; // i'th entry will fire eventid 7+i; eventid 25 is 'equip'
+				if (firstEntryIsEquip) {
+					Service.Log.Info($"Equipping item #{itemID} from {container.Value} @ {slot.Value}, index {i}");
+					//Callback.Fire(contextMenu, true, 0, i - 7, 0, 0, 0); // p2=-1 is close, p2=0 is exec first command
+				}
+			}
+			//Callback.Fire(contextMenu, true, 0, -1, 0, 0, 0);
+			EquipAttemptLoops++;
+
+			if (EquipAttemptLoops >= 5) 				//Service.Log.Error($"Equip option not found after 5 attempts. Aborting.");
+				return;
+		}
+	}
+
+
+
 
 	//public unsafe uint GlamDyeIdA => this.GlamId->GetStain(1);
 	//public unsafe uint GlamDyeA => InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot((int)this.GlamId)->GetStain(0);

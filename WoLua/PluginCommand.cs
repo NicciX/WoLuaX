@@ -5,11 +5,11 @@ using System.Reflection;
 
 using Dalamud.Game.Command;
 
-using NicciX.WoLua.Attributes;
-using NicciX.WoLua.Chat;
-using NicciX.WoLua.Utils;
+using WoLua.Attributes;
+using WoLua.Chat;
+using WoLua.Utils;
 
-namespace NicciX.WoLua;
+namespace WoLua;
 
 public abstract class PluginCommand: IDisposable {
 	protected bool Disposed { get; set; } = false;

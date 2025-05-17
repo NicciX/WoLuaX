@@ -6,7 +6,7 @@ using Dalamud.Interface.Windowing;
 
 using ImGuiNET;
 
-namespace NicciX.WoLua.Ui;
+namespace WoLua.Ui;
 
 internal abstract class BaseWindow: Window {
 	protected BaseWindow(string name, ImGuiWindowFlags flags = ImGuiWindowFlags.None, bool forceMainWindow = false) : base(name, flags, forceMainWindow) {
@@ -44,7 +44,7 @@ internal abstract class BaseWindow: Window {
 
 	protected static void Centred(string text, uint spacing = 1) {
 		float width = ImGui.CalcTextSize(text).X;
-		float offset = (ImGui.GetContentRegionAvail().X / 2) - (width / 2);
+		float offset = ImGui.GetContentRegionAvail().X / 2 - width / 2;
 		ImGui.SetCursorPosX(offset);
 		Textline(text, spacing);
 	}

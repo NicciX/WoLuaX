@@ -11,12 +11,15 @@ using ImGuiNET;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Serialization.Json;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Actions;
-using NicciX.WoLua.Lua.Api.Script;
-using NicciX.WoLua.Lua.Docs;
+using WoLua.Lua;
+using WoLua.Lua.Actions;
+using WoLua.Lua.Docs;
 
-namespace NicciX.WoLua.Lua.Api;
+using WoLua.Constants;
+using WoLua.Lua.Api.Script;
+
+
+namespace WoLua.Lua.Api;
 
 // This API is for all for everything that doesn't relate to the actual game itself.
 // It also contains script-specific and per-script functionality, like persistent storage.
@@ -244,7 +247,7 @@ public class ScriptApi: ApiBase {
 	[return: LuaDoc("The resulting JSON object/array as a string")]
 	public string SerialiseJson(Table content) {
 		this.Owner.CleanTable(content);
-		string json = JsonTableConverter.TableToJson(content);
+		string json = content.TableToJson();
 		this.Log(json, LogTag.JsonDump);
 		return json;
 	}
@@ -310,7 +313,7 @@ public class ScriptApi: ApiBase {
 			this.Log($"Registered on-execute function [{ToUsefulString(func, true)}]", LogTag.CallbackRegistration);
 		}
 		else {
-			string descriptor = func.Type.ToString() + (func.Type is DataType.UserData ? ("(" + (func.UserData.Object is null ? "static unknown" : func.UserData.Object.GetType().FullName) + ")") : "");
+			string descriptor = func.Type.ToString() + (func.Type is DataType.UserData ? "(" + (func.UserData.Object is null ? "static unknown" : func.UserData.Object.GetType().FullName) + ")" : "");
 			this.Log($"Got a {descriptor} instead of a function", LogTag.CallbackRegistration);
 			throw new ScriptRuntimeException("The provided value to Script() must be function to run when the script is called");
 		}

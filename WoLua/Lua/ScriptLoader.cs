@@ -4,9 +4,9 @@ using System.IO;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
 
-using NicciX.WoLua.Constants;
+using WoLua.Constants;
 
-namespace NicciX.WoLua.Lua;
+namespace WoLua.Lua;
 
 public class ScriptLoader: IScriptLoader {
 	public string BaseDir { get; }

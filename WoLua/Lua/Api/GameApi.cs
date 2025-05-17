@@ -9,14 +9,16 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Api;
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Game;
-using NicciX.WoLua.Lua.Api.Game;
-using NicciX.WoLua.Lua.Docs;
-using NicciX.WoLua.Ui.Chat;
+using WoLua.Api;
+using WoLua.Lua;
+using WoLua.Lua.Docs;
 
-namespace NicciX.WoLua.Lua.Api;
+using WoLua.Constants;
+using WoLua.Game;
+using WoLua.Lua.Api.Game;
+using WoLua.Ui.Chat;
+
+namespace WoLua.Lua.Api;
 
 // This API is for everything pertaining to the actual game, including holding more specific APIs.
 [MoonSharpUserData]

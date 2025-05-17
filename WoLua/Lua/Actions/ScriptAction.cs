@@ -1,4 +1,6 @@
-namespace NicciX.WoLua.Lua.Actions;
+using WoLua.Lua;
+
+namespace WoLua.Lua.Actions;
 
 public abstract class ScriptAction {
 	public void Run(ScriptContainer script) {

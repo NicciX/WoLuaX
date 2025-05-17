@@ -1,6 +1,8 @@
 using MoonSharp.Interpreter;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+using WoLua.Lua;
+
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 public class PartyApi: ApiBase { // TODO luadoc all of this

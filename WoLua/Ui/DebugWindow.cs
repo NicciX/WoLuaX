@@ -9,10 +9,11 @@ using ImGuiNET;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Lua;
-using NicciX.WoLua.Lua.Api;
+using WoLua.Lua;
 
-namespace NicciX.WoLua.Ui;
+using WoLua.Lua.Api;
+
+namespace WoLua.Ui;
 
 internal class DebugWindow: BaseWindow {
 	public const ImGuiWindowFlags CreationFlags = ImGuiWindowFlags.None
@@ -130,7 +131,7 @@ internal class DebugWindow: BaseWindow {
 			ImGui.Spacing();
 
 			if (script.Ready) {
-				ImGui.PushTextWrapPos(Width - (ImGui.GetStyle().WindowPadding.X * 2));
+				ImGui.PushTextWrapPos(Width - ImGui.GetStyle().WindowPadding.X * 2);
 
 				Textline("Globals:", 0);
 				ImGui.Indent();

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace NicciX.WoLua;
+namespace WoLua;
 
 [Serializable]
 public class CommandAssertionFailureException: Exception {

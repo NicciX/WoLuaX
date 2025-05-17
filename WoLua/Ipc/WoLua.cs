@@ -6,11 +6,11 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using Dalamud.Plugin.Services;
 
-using NicciX.WoLua;
-using NicciX.WoLua.Api;
-using NicciX.WoLua.Lua.Api;
+using WoLua.Lua.Api;
 
-namespace NicciX.WoLua.Ipc;
+using WoLua.Api;
+
+namespace WoLua.Ipc;
 
 public class WoLuaIpc : IDisposable {
 	private bool isAvailable = false;
@@ -28,8 +28,8 @@ public class WoLuaIpc : IDisposable {
 
 		this.RegisterFunctions();
 		Service.Log.Information($"New Chat: Api Call");
-		isAvailable = true;
-		cgIsAvailable.SendMessage();
+		this.isAvailable = true;
+		this.cgIsAvailable.SendMessage();
 	}
 	public bool IsAvailable() {
 		Service.Log.Information($"New Chat: Api Call2");

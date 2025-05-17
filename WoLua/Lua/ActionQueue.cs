@@ -6,10 +6,12 @@ using Dalamud.Plugin.Services;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Actions;
+using WoLua.Lua;
 
-namespace NicciX.WoLua.Lua;
+using WoLua.Constants;
+using WoLua.Lua.Actions;
+
+namespace WoLua.Lua;
 
 [SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "It's a queue for script actions")]
 public class ActionQueue: IDisposable {

@@ -2,10 +2,13 @@ using FFXIVClientStructs.FFXIV.Client.Game.UI;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Api;
-using NicciX.WoLua.Constants;
+using WoLua.Constants;
+using WoLua.Lua;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+using WoLua.Api;
+using WoLua.Lua.Api;
+
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 public class ChatApi: ApiBase { // TODO luadoc all of this

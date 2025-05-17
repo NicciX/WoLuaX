@@ -5,7 +5,7 @@ using System.Linq;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
 
-namespace NicciX.WoLua.Chat;
+namespace WoLua.Chat;
 
 public static class ChatUtil {
 

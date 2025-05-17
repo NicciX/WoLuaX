@@ -14,14 +14,15 @@ using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Docs;
+using WoLua.Lua.Docs;
+
+using WoLua.Constants;
 
 using CharacterData = FFXIVClientStructs.FFXIV.Client.Game.Character.CharacterData;
 using NativeCharacter = FFXIVClientStructs.FFXIV.Client.Game.Character.Character;
 using NativeGameObject = FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember(nameof(Entity))]
@@ -110,10 +111,10 @@ public sealed record class EntityWrapper(IGameObject? Entity): IWorldObjectWrapp
 	public unsafe bool? IsGendered => this ? (this.IsMale ?? false) || (this.IsFemale ?? false) : null;
 
 	public string? MF(string male, string female) => this.MFN(male, female, null!);
-	public string? MFN(string male, string female, string neither) => this ? (this.IsGendered ?? false) ? (this.IsMale ?? false) ? male : female : neither : null;
+	public string? MFN(string male, string female, string neither) => this ? this.IsGendered ?? false ? this.IsMale ?? false ? male : female : neither : null;
 
 	public DynValue MF(DynValue male, DynValue female) => this.MFN(male, female, DynValue.Nil);
-	public DynValue MFN(DynValue male, DynValue female, DynValue neither) => this ? (this.IsGendered ?? false) ? (this.IsMale ?? false) ? male : female : neither : DynValue.Nil;
+	public DynValue MFN(DynValue male, DynValue female, DynValue neither) => this ? this.IsGendered ?? false ? this.IsMale ?? false ? male : female : neither : DynValue.Nil;
 
 	#endregion
 
@@ -128,7 +129,7 @@ public sealed record class EntityWrapper(IGameObject? Entity): IWorldObjectWrapp
 	public string? TitleFullPrefixName => this.IsPlayer && this.playerTitle?.IsPrefix == true ? $"{this.TitleText} {this.Name}" : null;
 	public string? TitleFullSuffixName => this.IsPlayer && this.playerTitle?.IsPrefix == false ? $"{this.TitleText} {this.Name}" : null;
 	public string? TitleFullNameNoPrefix => this.IsPlayer ? $"{this.Name} {this.TitleText}" : null;
-	public string? TitleFullPrefixNameNoPrefix => this.IsPlayer && this.playerTitle?.IsPrefix == true ? $"{this.Name} {this.TitleText}" : null;
+	
 	#endregion
 
 	#region Stats
@@ -147,6 +148,7 @@ public sealed record class EntityWrapper(IGameObject? Entity): IWorldObjectWrapp
 
 	public unsafe string? Tribe => Service.DataManager.GetExcelSheet<Tribe>()!.GetRow(this.TribeId).Feminine.ToString();
 
+	
 	#endregion
 
 	#endregion

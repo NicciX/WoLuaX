@@ -4,9 +4,12 @@ using ImGuiNET;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Lua.Docs;
+using WoLua.Lua;
+using WoLua.Lua.Docs;
 
-namespace NicciX.WoLua.Lua.Api.Script;
+using WoLua.Lua.Api;
+
+namespace WoLua.Lua.Api.Script;
 
 [MoonSharpUserData]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Documentation generation only reflects instance members")]

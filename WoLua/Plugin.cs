@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Numerics;
 
 using Dalamud.Plugin.Services;
 using Dalamud.Game.Text.SeStringHandling;
@@ -18,22 +19,22 @@ using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Platforms;
-
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua;
-using NicciX.WoLua.Lua.Api.Game;
-using NicciX.WoLua.Ui;
-using NicciX.WoLua.Ui.Chat;
+using WoLua.Lua;
 using Dalamud.IoC;
-using NicciX.WoLua.Game;
-using NicciX.WoLua.Chat;
 using Dalamud.Game;
 
 using System.Reflection;
-using NicciX.WoLua.Api;
-using NicciX.WoLua.Ipc;
+using WoLua.Ui;
+using WoLua.Ipc;
+using WoLua.Chat;
+using WoLua.Constants;
+using WoLua.Ui.Chat;
+using WoLua.Game;
+using WoLua.Lua.Api.Game;
+using WoLua.Api;
+using Dalamud.Utility;
 
-namespace NicciX.WoLua;
+namespace WoLua;
 
 public class Plugin: IDalamudPlugin {
 	public const InteropAccessMode TypeRegistrationMode = InteropAccessMode.BackgroundOptimized;
@@ -45,9 +46,12 @@ public class Plugin: IDalamudPlugin {
 	[PluginService] internal static IDataManager Data { get; private set; } = null!;
 	[PluginService] internal static IGameInteropProvider Interop { get; private set; } = null!;
 	[PluginService] internal static IFramework Framework { get; private set; } = null!;
+	[PluginService] internal static IClientState Client { get; private set; } = null!;
+	[PluginService] internal static IObjectTable Objects { get; private set; } = null!;
 	[PluginService] internal static IPluginLog Log { get; private set; } = null!;
 	[PluginService] internal static ICommandManager CmdManager { get; private set; } = null!;
 	[PluginService] internal static IChatGui Chat { get; private set; } = null!;
+	[PluginService] internal static IGameGui Gui { get; private set; } = null!;
 	[PluginService] internal static ISigScanner Scanner { get; private set; } = null!;
 	internal static PluginCommandManager CommandManager { get; private set; } = null!;
 	internal static ServerChat ServerChat { get; private set; } = null!;
@@ -89,6 +93,16 @@ public class Plugin: IDalamudPlugin {
 		UserData.RegisterAssembly(typeof(Plugin).Assembly, true);
 		Script.GlobalOptions.RethrowExceptionNested = true;
 		Script.GlobalOptions.Platform = new LimitedPlatformAccessor();
+	}
+
+	internal static Vector2 WorldToMap(Vector3 pos, Map zone) => WorldToMap(new Vector2(pos.X, pos.Z), zone);
+	internal static Vector2 WorldToMap(Vector2 pos, Map zone) {
+		Vector2 raw = MapUtil.WorldToMap(pos, zone);
+		return new((int)MathF.Round(raw.X * 10, 1) / 10f, (int)MathF.Round(raw.Y * 10, 1) / 10f);
+	}
+	internal static Vector2 MapToWorld(Vector2 pos, Map zone) {
+		MapLinkPayload maplink = new(zone.TerritoryType.Value.RowId, zone.RowId, pos.X, pos.Y);
+		return new(maplink.RawX / 1000f, maplink.RawY / 1000f);
 	}
 
 	#region Initialisation and plugin setup

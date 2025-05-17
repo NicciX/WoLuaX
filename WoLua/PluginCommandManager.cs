@@ -7,9 +7,9 @@ using System.Runtime.Serialization;
 
 using Dalamud.Game.Command;
 
-using NicciX.WoLua.Attributes;
+using WoLua.Attributes;
 
-namespace NicciX.WoLua;
+namespace WoLua;
 
 public delegate void PluginCommandInvocationErrorHandler(params object[] payloads);
 

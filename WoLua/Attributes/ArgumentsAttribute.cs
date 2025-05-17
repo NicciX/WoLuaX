@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace NicciX.WoLua.Attributes;
+namespace WoLua.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 internal class ArgumentsAttribute(params string[] args): Attribute {

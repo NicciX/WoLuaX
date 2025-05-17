@@ -2,9 +2,11 @@ using FFXIVClientStructs.FFXIV.Client.Game.UI;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Constants;
+using WoLua.Lua;
 
-namespace NicciX.WoLua.Lua.Api.Game;
+using WoLua.Constants;
+
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 public class ChocoboApi: ApiBase { // TODO luadoc all of this
@@ -30,8 +32,8 @@ public class ChocoboApi: ApiBase { // TODO luadoc all of this
 	public byte? HealerLevel => this.obj?.HealerLevel;
 	public unsafe string? Name => this.obj?.NameString;
 
-	public unsafe uint? CurrentHp => (this.Summoned ?? false) ? this.obj!.Value.Companion->CurrentHealth : null;
-	public unsafe uint? MaxHp => (this.Summoned ?? false) ? this.obj!.Value.Companion->MaxHealth : null;
+	public unsafe uint? CurrentHp => this.Summoned ?? false ? this.obj!.Value.Companion->CurrentHealth : null;
+	public unsafe uint? MaxHp => this.Summoned ?? false ? this.obj!.Value.Companion->MaxHealth : null;
 
 	[MoonSharpUserDataMetamethod(Metamethod.Stringify)]
 	public override string ToString() => this.Name ?? string.Empty;

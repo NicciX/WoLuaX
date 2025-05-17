@@ -19,14 +19,15 @@ using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
 
-using NicciX.WoLua.Constants;
-using NicciX.WoLua.Lua.Docs;
+using WoLua.Lua;
+using WoLua.Lua.Docs;
+using WoLua.Constants;
 
 using Status = Lumina.Excel.Sheets.Status;
 
 
 
-namespace NicciX.WoLua.Lua.Api.Game;
+namespace WoLua.Lua.Api.Game;
 
 [MoonSharpUserData]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Documentation generation only reflects instance members")]
@@ -318,14 +319,14 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 	[LuaPlayerDoc("Whether the current character is performing crafting.")]
 	public bool? Crafting => this.Loaded
 		? Service.Condition[ConditionFlag.Crafting]
-		|| Service.Condition[ConditionFlag.Crafting40]
+		|| Service.Condition[ConditionFlag.ExecutingCraftingAction]
 		|| Service.Condition[ConditionFlag.PreparingToCraft]
 		: null;
 
 	[LuaPlayerDoc("Whether the current character is engaged with a gathering node.")]
 	public bool? Gathering => this.Loaded
 		? Service.Condition[ConditionFlag.Gathering]
-		|| Service.Condition[ConditionFlag.Gathering42]
+		|| Service.Condition[ConditionFlag.ExecutingGatheringAction]
 		: null;
 
 	[LuaPlayerDoc("Whether the current character is actively fishing.")]
@@ -404,19 +405,19 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 		: null;
 	[LuaPlayerDoc("Whether the current character is afk.")]
 	public bool? IsAfk => this.Loaded
-		? (Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 17) : null;
+		? Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 17 : null;
 	[LuaPlayerDoc("Whether the current character is waiting for duty.")]
 	public bool? WfDuty => this.Loaded
-		? (Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 25) : null;
+		? Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 25 : null;
 
 	public bool? IsPvP => this.Loaded
-		? (Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 13) : null;
+		? Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 13 : null;
 
 	public bool? WellFed => this.HasStatus("Well Fed") ?? null;
 
 	public unsafe bool? HasStatus(string statusName) {
 		statusName = statusName.ToLowerInvariant();
-		ExcelSheet<Status> sheet = Service.DataManager.GetExcelSheet<Sheets.Status>()!;
+		ExcelSheet<Status> sheet = Service.DataManager.GetExcelSheet<Status>()!;
 		uint[] statusIDs = sheet
 			.Where(row => row.Name.ExtractText().Equals(statusName, StringComparison.InvariantCultureIgnoreCase))
 			.Select(row => row.RowId)
@@ -428,6 +429,8 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 	}
 
 	public unsafe bool? HasStatusId(params uint[] statusIDs) {
+		if (!this.Loaded)
+			return null;
 		uint statusID = Service.ClientState.LocalPlayer!.StatusList
 			.Select(se => se.StatusId)
 			.ToList().Intersect(statusIDs)
@@ -460,6 +463,9 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 	public bool? Jumping => this.Loaded
 		? Service.Condition[ConditionFlag.Jumping]
 		|| Service.Condition[ConditionFlag.Jumping61]
+		: null;
+	public bool? AtBell => this.Loaded
+		? Service.Condition[ConditionFlag.OccupiedSummoningBell]
 		: null;
 
 	[LuaPlayerDoc("Whether the current character is within an instanced duty.")]
@@ -633,7 +639,7 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 			return null;
 		}
 		UIState* uiState = UIState.Instance();
-		if (uiState is null || (IntPtr)uiState == IntPtr.Zero) {
+		if (uiState is null || (nint)uiState == nint.Zero) {
 			this.Log("UIState is null", LogTag.Emotes);
 			return null;
 		}

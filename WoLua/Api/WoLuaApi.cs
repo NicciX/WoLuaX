@@ -5,9 +5,7 @@ using System.Text.RegularExpressions;
 
 using Lumina.Excel.Sheets;
 
-using NicciX.WoLua;
-
-namespace NicciX.WoLua.Api;
+namespace WoLua.Api;
 
 public class WoLuaApi : IDisposable, IWoLuaApi
 {
@@ -26,9 +24,7 @@ public class WoLuaApi : IDisposable, IWoLuaApi
 	private void CheckInitialised()
     {
         if (!this.initialised)
-        {
             throw new Exception("PluginShare is not initialised.");
-        }
     }
 
     public void NewChat(string msg, string sender, string chn, string match)
@@ -36,11 +32,11 @@ public class WoLuaApi : IDisposable, IWoLuaApi
         this.CheckInitialised();
 
         Service.Log.Information($"New Chat: {msg}");
-        WoLuaApi.Msg = msg;
-		WoLuaApi.Sender = sender;
-		WoLuaApi.Chn = chn;
-		WoLuaApi.Match = match;
-		WoLuaApi.Stamp = (uint)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+		Msg = msg;
+		Sender = sender;
+		Chn = chn;
+		Match = match;
+		Stamp = (uint)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 		
 		
 		
