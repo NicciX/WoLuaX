@@ -1,7 +1,16 @@
 {
-	"Name": "WoLuaX",
-	"Author": "VariableVixen, NicciX",
-	"Description": "Write custom chat commands by creating lua scripts",
-	"RepoUrl": "https://github.com/NicciX/WoLuaX",
-	"Punchline": "Write your own custom chat commands in lua!"
+  "Author": "VariableVixen, NicciX",
+  "Name": "WoLuaX",
+  "InternalName": "WoLuaX",
+  "AssemblyVersion": "3.9.0",
+  "Description": "Write custom chat commands by creating lua scripts",
+  "ApplicableVersion": "any",
+  "RepoUrl": "https://github.com/NicciX/WoLuaX",
+  "DalamudApiLevel": 12,
+  "LoadRequiredState": 0,
+  "LoadSync": false,
+  "CanUnloadAsync": false,
+  "LoadPriority": 0,
+  "Punchline": "Write your own custom chat commands in lua!",
+  "AcceptsFeedback": true
 }
