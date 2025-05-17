@@ -10,7 +10,7 @@ This is my testing build of WoLua by VariableVixen.
 WoLua is a plugin that allows users (like you!) to write custom, context-aware chat commands in [lua](https://www.lua.org/). These commands can read information from the game through WoLua's API, and are able to do things like printing messages to your local chatlog, send chat (commands _and_ plain text) to the server, and more.
 
 ## Installation
-Type `/xlplugins` in-game to access the plugin installer and updater. Note that you will need to add [my custom plugin repository](https://raw.githubusercontent.com/NicciX/Repos/main/repo.json) (full instructions included at that link) in order to find this plugin.
+Type `/xlplugins` in-game to access the plugin installer and updater. Note that you will need to add [my custom plugin repository](https://raw.githubusercontent.com/NicciX/Repos/main/repo.json) in order to find this plugin.
 
 ## In-game usage
 - Type `/wolua` to pull up a GUI with basic instructions and the configuration options.
