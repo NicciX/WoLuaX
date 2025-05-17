@@ -3,13 +3,11 @@ using System.Diagnostics.CodeAnalysis;
 using ImGuiNET;
 
 using MoonSharp.Interpreter;
-
 using WoLua.Lua;
 using WoLua.Lua.Docs;
+using WoLuaX.Lua.Api;
 
-using WoLua.Lua.Api;
-
-namespace WoLua.Lua.Api.Script;
+namespace WoLuaX.Lua.Api.Script;
 
 [MoonSharpUserData]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Documentation generation only reflects instance members")]
@@ -22,7 +20,7 @@ public class KeysApi: ApiBase {
 	[LuaDoc("Whether a control key is currently down.",
 		"This is an alternative spelling for the `.Control` property.")]
 	public bool Ctrl
-		=> this.Control;
+		=> Control;
 
 	[LuaDoc("Whether an alt key is currently down.")]
 	public bool Alt

@@ -5,10 +5,9 @@ using Lumina.Excel;
 using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
+using WoLuaX.Constants;
 
-using WoLua.Constants;
-
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember("<Clone>$")]
@@ -35,13 +34,13 @@ public sealed record class MountWrapper: IEquatable<MountWrapper> { // TODO luad
 	public string? UppercaseArticle { get; }
 
 	public MountWrapper(ushort id) {
-		this.Active = mountNames.TryGetValue(id, out string? name);
-		this.Id = this.Active ? id : (ushort)0;
-		this.Name = name;
-		this.UppercaseArticle = this.Active ? mountArticles[id] : null;
-		this.LowercaseArticle = this.UppercaseArticle?.ToLower();
+        Active = mountNames.TryGetValue(id, out string? name);
+        Id = Active ? id : (ushort)0;
+        Name = name;
+        UppercaseArticle = Active ? mountArticles[id] : null;
+        LowercaseArticle = UppercaseArticle?.ToLower();
 	}
 
 	[MoonSharpUserDataMetamethod(Metamethod.Stringify)]
-	public override string ToString() => this.Name ?? string.Empty;
+	public override string ToString() => Name ?? string.Empty;
 }

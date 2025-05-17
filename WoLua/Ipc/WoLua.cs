@@ -10,7 +10,7 @@ using WoLua.Lua.Api;
 
 using WoLua.Api;
 
-namespace WoLua.Ipc;
+namespace WoLuaX.Ipc;
 
 public class WoLuaIpc : IDisposable {
 	private bool isAvailable = false;
@@ -18,22 +18,22 @@ public class WoLuaIpc : IDisposable {
 	private readonly ICallGateProvider<string, string, string, string, bool> updateChat;
 
 	public WoLuaIpc() {
-		this.cgIsAvailable = Service.Interface.GetIpcProvider<bool>("WoLua.IsAvailable");
-		this.cgIsAvailable.RegisterFunc(this.IsAvailable);
-		//_getItemInfoProvider = Service.Interface.GetIpcProvider<uint, HashSet<(uint npcId, uint territory, (float x, float y))>?>("ItemVendorLocation.GetItemVendors");
-		//_pluginLog = pluginLog;
+        cgIsAvailable = Service.Interface.GetIpcProvider<bool>("WoLua.IsAvailable");
+        cgIsAvailable.RegisterFunc(IsAvailable);
+        //_getItemInfoProvider = Service.Interface.GetIpcProvider<uint, HashSet<(uint npcId, uint territory, (float x, float y))>?>("ItemVendorLocation.GetItemVendors");
+        //_pluginLog = pluginLog;
 
-		this.updateChat = Service.Interface.GetIpcProvider<string, string, string, string, bool>("WoLua.UpdateChat");
-		this.updateChat.RegisterFunc(this.UpdateChat);
+        updateChat = Service.Interface.GetIpcProvider<string, string, string, string, bool>("WoLua.UpdateChat");
+        updateChat.RegisterFunc(UpdateChat);
 
-		this.RegisterFunctions();
+        RegisterFunctions();
 		Service.Log.Information($"New Chat: Api Call");
-		this.isAvailable = true;
-		this.cgIsAvailable.SendMessage();
+        isAvailable = true;
+        cgIsAvailable.SendMessage();
 	}
 	public bool IsAvailable() {
 		Service.Log.Information($"New Chat: Api Call2");
-		return this.isAvailable;
+		return isAvailable;
 	}
 	private bool UpdateChat(
 		string msg,
@@ -57,8 +57,8 @@ public class WoLuaIpc : IDisposable {
 	}
 
 	public void RegisterFunctions() {
-		//this.updateChat = Service.Interface.GetIpcProvider<string, string, string, bool>("WoLua.UpdateChat");
-		this.updateChat.RegisterFunc(this.UpdateChat);
+        //this.updateChat = Service.Interface.GetIpcProvider<string, string, string, bool>("WoLua.UpdateChat");
+        updateChat.RegisterFunc(UpdateChat);
 		//_getItemInfoProvider.RegisterFunc(GetItemVendors);
 		Service.Log.Information($"New Chat: Api Call2");
 	}

@@ -6,12 +6,12 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 
 using XivCommon;
-using WoLua.Ipc;
-using WoLua.Constants;
-using WoLua.Game;
-using WoLua.Lua.Docs;
+using WoLuaX.Ipc;
+using WoLuaX.Constants;
+using WoLuaX.Game;
+using WoLuaX.Lua.Docs;
 
-namespace WoLua;
+namespace WoLuaX;
 
 internal class Service {
 

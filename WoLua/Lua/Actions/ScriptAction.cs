@@ -1,16 +1,16 @@
 using WoLua.Lua;
 
-namespace WoLua.Lua.Actions;
+namespace WoLuaX.Lua.Actions;
 
 public abstract class ScriptAction {
 	public void Run(ScriptContainer script) {
 		if (script is null || script.Disposed)
 			return;
 
-		this.Process(script);
+        Process(script);
 	}
 	protected abstract void Process(ScriptContainer script);
 
 	public override string ToString()
-		=> this.GetType().Name;
+		=> GetType().Name;
 }

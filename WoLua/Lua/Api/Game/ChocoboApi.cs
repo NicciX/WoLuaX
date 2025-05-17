@@ -1,12 +1,10 @@
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 
 using MoonSharp.Interpreter;
-
 using WoLua.Lua;
+using WoLuaX.Constants;
 
-using WoLua.Constants;
-
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 public class ChocoboApi: ApiBase { // TODO luadoc all of this
@@ -20,21 +18,21 @@ public class ChocoboApi: ApiBase { // TODO luadoc all of this
 	}
 	public static implicit operator bool(ChocoboApi? bird) => bird?.obj is not null;
 
-	public float? TimeLeft => this.obj?.TimeLeft;
-	public bool? Summoned => this ? (this.TimeLeft ?? 0) > 0 : null;
-	public uint? CurrentXP => this.obj?.CurrentXP;
-	public byte? Rank => this.obj?.Rank;
-	public bool? Unlocked => this ? (this.Rank ?? 0) > 0 : null;
-	public byte? Stars => this.obj?.Stars;
-	public byte? SkillPoints => this.obj?.SkillPoints;
-	public byte? DefenderLevel => this.obj?.DefenderLevel;
-	public byte? AttackerLevel => this.obj?.AttackerLevel;
-	public byte? HealerLevel => this.obj?.HealerLevel;
-	public unsafe string? Name => this.obj?.NameString;
+	public float? TimeLeft => obj?.TimeLeft;
+	public bool? Summoned => this ? (TimeLeft ?? 0) > 0 : null;
+	public uint? CurrentXP => obj?.CurrentXP;
+	public byte? Rank => obj?.Rank;
+	public bool? Unlocked => this ? (Rank ?? 0) > 0 : null;
+	public byte? Stars => obj?.Stars;
+	public byte? SkillPoints => obj?.SkillPoints;
+	public byte? DefenderLevel => obj?.DefenderLevel;
+	public byte? AttackerLevel => obj?.AttackerLevel;
+	public byte? HealerLevel => obj?.HealerLevel;
+	public unsafe string? Name => obj?.NameString;
 
-	public unsafe uint? CurrentHp => this.Summoned ?? false ? this.obj!.Value.Companion->CurrentHealth : null;
-	public unsafe uint? MaxHp => this.Summoned ?? false ? this.obj!.Value.Companion->MaxHealth : null;
+	public unsafe uint? CurrentHp => Summoned ?? false ? obj!.Value.Companion->CurrentHealth : null;
+	public unsafe uint? MaxHp => Summoned ?? false ? obj!.Value.Companion->MaxHealth : null;
 
 	[MoonSharpUserDataMetamethod(Metamethod.Stringify)]
-	public override string ToString() => this.Name ?? string.Empty;
+	public override string ToString() => Name ?? string.Empty;
 }

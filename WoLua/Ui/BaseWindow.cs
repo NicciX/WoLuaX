@@ -6,13 +6,13 @@ using Dalamud.Interface.Windowing;
 
 using ImGuiNET;
 
-namespace WoLua.Ui;
+namespace WoLuaX.Ui;
 
 internal abstract class BaseWindow: Window {
 	protected BaseWindow(string name, ImGuiWindowFlags flags = ImGuiWindowFlags.None, bool forceMainWindow = false) : base(name, flags, forceMainWindow) {
-		this.RespectCloseHotkey = true;
-		this.IsOpen = false;
-		this.TitleBarButtons = [
+        RespectCloseHotkey = true;
+        IsOpen = false;
+        TitleBarButtons = [
 			new() {
 				Priority = 0,
 				Icon = FontAwesomeIcon.Heart,
@@ -36,8 +36,8 @@ internal abstract class BaseWindow: Window {
 				},
 			},
 		];
-		this.AllowClickthrough = false;
-		this.AllowPinning = true;
+        AllowClickthrough = false;
+        AllowPinning = true;
 	}
 
 

@@ -1,4 +1,4 @@
-namespace WoLua.Chat;
+namespace WoLuaX.Chat;
 
 public enum ChatColourKey: ushort {
 	NONE = 0,

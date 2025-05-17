@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using MoonSharp.Interpreter;
 
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember(nameof(Equals))]
@@ -16,14 +16,14 @@ public record class EorzeanTime: IComparable<EorzeanTime>, IEquatable<EorzeanTim
 
 	[MoonSharpHidden]
 	public EorzeanTime(byte hour, byte minute) {
-		this.Hour = hour;
-		this.Minute = minute;
+        Hour = hour;
+        Minute = minute;
 	}
 	[MoonSharpHidden]
 	public EorzeanTime(long realMs) {
 		long totalMinutes = (long)(realMs * ConversionRate / 60000);
-		this.Hour = (byte)(totalMinutes / 60 % 24);
-		this.Minute = (byte)(totalMinutes % 60);
+        Hour = (byte)(totalMinutes / 60 % 24);
+        Minute = (byte)(totalMinutes % 60);
 	}
 	[MoonSharpHidden]
 	public EorzeanTime() : this(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) { }
@@ -32,13 +32,13 @@ public record class EorzeanTime: IComparable<EorzeanTime>, IEquatable<EorzeanTim
 	public int CompareTo(EorzeanTime? other) {
 		return other is null
 			? 1
-			: this.Hour > other.Hour
+			: Hour > other.Hour
 			? 1
-			: this.Hour < other.Hour
+			: Hour < other.Hour
 			? -1
-			: this.Minute > other.Minute
+			: Minute > other.Minute
 			? 1
-			: this.Minute < other.Minute
+			: Minute < other.Minute
 			? -1
 			: 0;
 	}

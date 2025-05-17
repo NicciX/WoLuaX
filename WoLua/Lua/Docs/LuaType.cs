@@ -5,10 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using MoonSharp.Interpreter;
-
 using WoLua.Constants;
 
-namespace WoLua.Lua.Docs;
+namespace WoLuaX.Lua.Docs;
 
 [SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "the names are defined externally")]
 [Flags]

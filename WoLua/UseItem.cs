@@ -10,16 +10,13 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
 using Lumina.Excel.Sheets;
-
 using WoLua.Attributes;
-
-using WoLua.Chat;
-using WoLua.Utils;
-
+using WoLuaX.Chat;
+using WoLuaX.Utils;
 using CSFW = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 
 
-namespace WoLua;
+namespace WoLuaX;
 
 [Command("/useitem", "/use", "/item")]
 [Summary("Use an item from your inventory by numeric ID or by name (case-insensitive full match)")]
@@ -54,7 +51,7 @@ public unsafe class UseItem: PluginCommand {
 
 	protected override void Initialise() {
 		Plugin.Interop.InitializeFromAttributes(this);
-		Plugin.Framework.Update += this.attemptReuse;
+		Plugin.Framework.Update += attemptReuse;
 	}
 
 	protected override void Execute(string? command, string rawArguments, FlagMap flags, bool verbose, bool dryRun, ref bool showHelp) {
@@ -81,12 +78,12 @@ public unsafe class UseItem: PluginCommand {
 			}
 		}
 
-		this.use(itemId);
+        use(itemId);
 	}
 
 	private void use(uint id) {
 		if (useItem is null) {
-			Plugin.Log.Error($"{this.GetType().Name}.use(uint) called without useItem delegate");
+			Plugin.Log.Error($"{GetType().Name}.use(uint) called without useItem delegate");
 			return;
 		}
 
@@ -112,10 +109,10 @@ public unsafe class UseItem: PluginCommand {
 
 		// For some reason, items occasionally fail to actually be used, and this is how we can detect that
 		// The ""fix"" is a horrible hack in which we basically just keep trying to use it every framework update :v
-		if (getActionID is not null && this.retryItem == 0 && id < 2_000_000) {
+		if (getActionID is not null && retryItem == 0 && id < 2_000_000) {
 			uint actionID = getActionID((uint)ActionType.Item, id);
 			if (actionID == 0) {
-				this.retryItem = id;
+                retryItem = id;
 				return;
 			}
 		}
@@ -123,18 +120,18 @@ public unsafe class UseItem: PluginCommand {
 		useItem((nint)itemContextMenuAgent, id, 999, 0, 0);
 	}
 	private void attemptReuse(IFramework framework) {
-		if (this.retryItem > 0) {
-			this.use(this.retryItem);
-			this.retryItem = 0;
+		if (retryItem > 0) {
+            use(retryItem);
+            retryItem = 0;
 		}
 	}
 	protected override void Dispose(bool disposing) {
-		if (this.Disposed)
+		if (Disposed)
 			return;
-		this.Disposed = true;
+        Disposed = true;
 
 		if (disposing)
-			Plugin.Framework.Update -= this.attemptReuse;
+			Plugin.Framework.Update -= attemptReuse;
 
 		base.Dispose(disposing);
 	}

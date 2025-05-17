@@ -6,10 +6,9 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 using Dalamud.Game.Command;
+using WoLuaX.Attributes;
 
-using WoLua.Attributes;
-
-namespace WoLua;
+namespace WoLuaX;
 
 public delegate void PluginCommandInvocationErrorHandler(params object[] payloads);
 
@@ -17,7 +16,7 @@ public class PluginCommandManager: IDisposable {
 
 	private readonly List<PluginCommand> commandList;
 
-	internal PluginCommand[] Commands => this.commandList.ToArray();
+	internal PluginCommand[] Commands => commandList.ToArray();
 
 	private readonly bool disposed = false;
 
@@ -27,7 +26,7 @@ public class PluginCommandManager: IDisposable {
 	public PluginCommandManager(Plugin core) {
 		Type b = typeof(PluginCommand);
 		Type p = core.GetType();
-		this.commandList = this.GetType().Assembly.GetTypes()
+        commandList = GetType().Assembly.GetTypes()
 			.Where(t => t.IsSubclassOf(b) && !t.IsAbstract && t.GetConstructor([]) is not null)
 			.Select(t => {
 				try {
@@ -52,11 +51,11 @@ public class PluginCommandManager: IDisposable {
 			.Where(o => o is not null)
 			.Cast<PluginCommand>()
 			.ToList();
-		this.HelpHandler = this.commandList.Find(c => c.GetType().GetCustomAttribute<PluginCommandHelpHandlerAttribute>() is not null);
+        HelpHandler = commandList.Find(c => c.GetType().GetCustomAttribute<PluginCommandHelpHandlerAttribute>() is not null);
 	}
 
 	internal void AddCommandHandlers() {
-		foreach (PluginCommand cmd in this.Commands) {
+		foreach (PluginCommand cmd in Commands) {
 			Plugin.Log.Information($"Registering command {cmd.InternalName} as {string.Join(", ", cmd.InvocationNames)}");
 			Plugin.CmdManager.AddHandler(cmd.Command, cmd.MainCommandInfo);
 			CommandInfo hidden = cmd.AliasCommandInfo;
@@ -67,7 +66,7 @@ public class PluginCommandManager: IDisposable {
 	}
 
 	internal void RemoveCommandHandlers() {
-		foreach (PluginCommand cmd in this.Commands) {
+		foreach (PluginCommand cmd in Commands) {
 			Plugin.Log.Information($"Unregistering command {string.Join(", ", cmd.InvocationNames)} for {cmd.InternalName}");
 			Plugin.CmdManager.RemoveHandler(cmd.Command);
 			foreach (string alt in cmd.Aliases) {
@@ -78,24 +77,24 @@ public class PluginCommandManager: IDisposable {
 
 	#region IDisposable Support
 	protected virtual void Dispose(bool disposing) {
-		if (this.disposed)
+		if (disposed)
 			return;
 
 		if (disposing) {
-			this.RemoveCommandHandlers();
+            RemoveCommandHandlers();
 
-			foreach (PluginCommand cmd in this.commandList)
+			foreach (PluginCommand cmd in commandList)
 				cmd.Dispose();
 
-			this.commandList.Clear();
+            commandList.Clear();
 		}
 	}
 	public void Dispose() {
-		this.Dispose(true);
+        Dispose(true);
 		GC.SuppressFinalize(this);
 	}
 	~PluginCommandManager() {
-		this.Dispose(false);
+        Dispose(false);
 	}
 	#endregion
 }

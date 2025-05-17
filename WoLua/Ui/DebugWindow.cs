@@ -8,12 +8,10 @@ using Dalamud.Plugin;
 using ImGuiNET;
 
 using MoonSharp.Interpreter;
-
 using WoLua.Lua;
+using WoLuaX.Lua.Api;
 
-using WoLua.Lua.Api;
-
-namespace WoLua.Ui;
+namespace WoLuaX.Ui;
 
 internal class DebugWindow: BaseWindow {
 	public const ImGuiWindowFlags CreationFlags = ImGuiWindowFlags.None
@@ -70,7 +68,7 @@ internal class DebugWindow: BaseWindow {
 	];
 
 	public DebugWindow() : base($"{Plugin.Name} v{Service.Plugin.Version} - Debug##DebugWindow", CreationFlags) {
-		this.SizeConstraints = new() {
+        SizeConstraints = new() {
 			MinimumSize = new(Width, 100),
 			MaximumSize = new(Width, 800),
 		};

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace WoLua;
+namespace WoLuaX;
 
 [Serializable]
 public class CommandAssertionFailureException: Exception {

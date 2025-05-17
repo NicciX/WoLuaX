@@ -4,7 +4,7 @@ using System.Threading;
 using Lumina.Excel;
 using Lumina.Excel.Sheets;
 
-namespace WoLua;
+namespace WoLuaX;
 
 public static class ExcelContainer {
 	private static Lazy<ExcelSheet<T>> init<T>() where T: struct, IExcelRow<T> {

@@ -5,7 +5,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
-namespace WoLua;
+namespace WoLuaX;
 
 public class Hooks: IDisposable {
 	private bool disposed;
@@ -25,9 +25,9 @@ public class Hooks: IDisposable {
 	}
 
 	protected virtual void Dispose(bool disposing) {
-		if (this.disposed)
+		if (disposed)
 			return;
-		this.disposed = true;
+        disposed = true;
 
 		if (disposing) {
 			// nop
@@ -37,7 +37,7 @@ public class Hooks: IDisposable {
 	}
 
 	public void Dispose() {
-		this.Dispose(true);
+        Dispose(true);
 		GC.SuppressFinalize(this);
 	}
 }

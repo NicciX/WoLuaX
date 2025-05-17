@@ -9,7 +9,7 @@ using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI;
 
-namespace WoLua.Game;
+namespace WoLuaX.Game;
 
 internal class ServerChat {
 	private static class Signatures {
@@ -25,7 +25,7 @@ internal class ServerChat {
 
 	internal unsafe ServerChat(ISigScanner scanner) {
 		if (scanner.TryScanText(Signatures.SendChat, out nint processChatBoxPtr)) {
-			this.processChatBox = Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(processChatBoxPtr);
+            processChatBox = Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(processChatBoxPtr);
 			Service.Log?.Information("Found signature for chat sending");
 		}
 		else {
@@ -33,7 +33,7 @@ internal class ServerChat {
 		}
 
 		if (scanner.TryScanText(Signatures.SanitiseString, out nint sanitisePtr)) {
-			this.sanitiseString = (delegate* unmanaged<Utf8String*, int, nint, void>)sanitisePtr;
+            sanitiseString = (delegate* unmanaged<Utf8String*, int, nint, void>)sanitisePtr;
 			Service.Log?.Information("Found signature for chat sanitisation");
 		}
 		else {
@@ -42,7 +42,7 @@ internal class ServerChat {
 	}
 
 	public unsafe void SendMessageUnsafe(byte[] message) {
-		if (this.processChatBox == null)
+		if (processChatBox == null)
 			throw new InvalidOperationException("Could not find signature for chat sending");
 
 		UIModule* uiModule = Framework.Instance()->GetUIModule();
@@ -53,7 +53,7 @@ internal class ServerChat {
 		nint mem1 = Marshal.AllocHGlobal(400);
 		Marshal.StructureToPtr(payload, mem1, false);
 
-		this.processChatBox((nint)uiModule, mem1, nint.Zero, 0);
+        processChatBox((nint)uiModule, mem1, nint.Zero, 0);
 
 		Marshal.FreeHGlobal(mem1);
 	}
@@ -66,19 +66,19 @@ internal class ServerChat {
 		if (bytes.Length > 500)
 			throw new ArgumentException("message is longer than 500 bytes", nameof(message));
 
-		if (message.Length != this.SanitiseText(message).Length)
+		if (message.Length != SanitiseText(message).Length)
 			throw new ArgumentException("message contained invalid characters", nameof(message));
 
-		this.SendMessageUnsafe(bytes);
+        SendMessageUnsafe(bytes);
 	}
 
 	public unsafe string SanitiseText(string text) {
-		if (this.sanitiseString == null)
+		if (sanitiseString == null)
 			throw new InvalidOperationException("Could not find signature for chat sanitisation");
 
 		Utf8String* uText = Utf8String.FromString(text);
 
-		this.sanitiseString(uText, 0x27F, nint.Zero);
+        sanitiseString(uText, 0x27F, nint.Zero);
 		string sanitised = uText->ToString();
 
 		uText->Dtor();
@@ -104,17 +104,17 @@ internal class ServerChat {
 		private readonly ulong unk2;
 
 		internal ChatPayload(byte[] stringBytes) {
-			this.textPtr = Marshal.AllocHGlobal(stringBytes.Length + 30);
-			Marshal.Copy(stringBytes, 0, this.textPtr, stringBytes.Length);
-			Marshal.WriteByte(this.textPtr + stringBytes.Length, 0);
+            textPtr = Marshal.AllocHGlobal(stringBytes.Length + 30);
+			Marshal.Copy(stringBytes, 0, textPtr, stringBytes.Length);
+			Marshal.WriteByte(textPtr + stringBytes.Length, 0);
 
-			this.textLen = (ulong)(stringBytes.Length + 1);
+            textLen = (ulong)(stringBytes.Length + 1);
 
-			this.unk1 = 64;
-			this.unk2 = 0;
+            unk1 = 64;
+            unk2 = 0;
 		}
 
-		public void Dispose() => Marshal.FreeHGlobal(this.textPtr);
+		public void Dispose() => Marshal.FreeHGlobal(textPtr);
 	}
 
 

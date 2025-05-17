@@ -1,6 +1,6 @@
 using System;
 
-namespace WoLua.Lua.Docs;
+namespace WoLuaX.Lua.Docs;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
 internal class SkipDocAttribute: Attribute {

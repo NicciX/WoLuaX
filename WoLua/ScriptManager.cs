@@ -3,32 +3,30 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-
 using WoLua.Lua;
+using WoLuaX.Constants;
 
-using WoLua.Constants;
-
-namespace WoLua;
+namespace WoLuaX;
 
 public class ScriptManager: IDisposable {
 	private ConcurrentDictionary<string, ScriptContainer> loadedScripts { get; } = new();
 	private SingleExecutionTask scriptScanner { get; init; } = null!;
 
-	internal ScriptManager() => this.scriptScanner = new(this.scanScripts);
+	internal ScriptManager() => scriptScanner = new(scanScripts);
 
 	#region Public API
 
-	public int TotalScripts => this.loadedScripts.Count;
-	public int LoadedScripts => this.loadedScripts.Values.Where(c => c.Ready).Count();
-	public int WorkingScripts => this.loadedScripts.Values.Where(c => c.Active).Count();
-	public bool IsEmpty => this.loadedScripts.IsEmpty;
+	public int TotalScripts => loadedScripts.Count;
+	public int LoadedScripts => loadedScripts.Values.Where(c => c.Ready).Count();
+	public int WorkingScripts => loadedScripts.Values.Where(c => c.Active).Count();
+	public bool IsEmpty => loadedScripts.IsEmpty;
 
-	public string[] Slugs => this.loadedScripts.Keys.ToArray();
-	public ScriptContainer[] Scripts => this.loadedScripts.Values.ToArray();
+	public string[] Slugs => loadedScripts.Keys.ToArray();
+	public ScriptContainer[] Scripts => loadedScripts.Values.ToArray();
 
 	public bool FindScriptByInformalSlug(string identifier, [NotNullWhen(true)] out ScriptContainer? script) {
 		script = null;
-		if (this.disposed)
+		if (disposed)
 			return false;
 
 		string[] tries = [
@@ -39,7 +37,7 @@ public class ScriptManager: IDisposable {
 			identifier.ToUpperInvariant(),
 		];
 		foreach (string attempt in tries) {
-			if (this.loadedScripts.TryGetValue(attempt, out script))
+			if (loadedScripts.TryGetValue(attempt, out script))
 				break;
 		}
 
@@ -47,20 +45,20 @@ public class ScriptManager: IDisposable {
 	}
 
 	public void Invoke(string name, string parameters) {
-		if (this.disposed)
+		if (disposed)
 			return;
 
-		if (this.FindScriptByInformalSlug(name, out ScriptContainer? cmd)) 			cmd.Invoke(parameters);
+		if (FindScriptByInformalSlug(name, out ScriptContainer? cmd)) 			cmd.Invoke(parameters);
 		else {
 			Service.Plugin.Error($"No such command \"{name}\" exists.");
 		}
 	}
 
 	public void Rescan() {
-		if (this.disposed)
+		if (disposed)
 			return;
 
-		this.scriptScanner.Run();
+        scriptScanner.Run();
 	}
 
 	#endregion
@@ -71,12 +69,12 @@ public class ScriptManager: IDisposable {
 		using MethodTimer logtimer = new();
 
 		Service.Log.Information($"[{LogTag.PluginCore}] Disposing all loaded scripts");
-		ScriptContainer[] scripts = this.loadedScripts.Values?.ToArray() ?? [];
+		ScriptContainer[] scripts = loadedScripts.Values?.ToArray() ?? [];
 		foreach (ScriptContainer script in scripts) {
 			script?.Dispose();
 		}
 		Service.Log.Information($"[{LogTag.PluginCore}] Clearing all loaded scripts");
-		this.loadedScripts.Clear();
+        loadedScripts.Clear();
 	}
 
 	#endregion
@@ -105,7 +103,7 @@ public class ScriptManager: IDisposable {
 			}
 		}
 
-		this.ClearAllScripts();
+        ClearAllScripts();
 		Service.Log.Information($"[{LogTag.ScriptLoader}:{LogTag.PluginCore}] Scanning root script directory {path}");
 		string[] dirs = Directory.GetDirectories(path);
 		Service.Log.Information($"[{LogTag.ScriptLoader}:{LogTag.PluginCore}] Found {dirs.Length} script director{(dirs.Length == 1 ? "y" : "ies")}");
@@ -114,7 +112,7 @@ public class ScriptManager: IDisposable {
 			string file = Path.Combine(dir, "command.lua");
 			string name = new DirectoryInfo(dir).Name;
 			string slug = ScriptContainer.NameToSlug(name);
-			if (this.loadedScripts.ContainsKey(slug)) {
+			if (loadedScripts.ContainsKey(slug)) {
 				Service.Plugin.Error($"Duplicate script invocation name {slug} (for {name})");
 				continue;
 			}
@@ -122,7 +120,7 @@ public class ScriptManager: IDisposable {
 				Service.Log.Information($"[{LogTag.ScriptLoader}:{slug}] Loading {file}");
 				ScriptContainer script = new(file, name, slug);
 				Service.Log.Information($"[{LogTag.ScriptLoader}:{slug}] Registering script container for {slug}");
-				this.loadedScripts.TryAdd(slug, script);
+                loadedScripts.TryAdd(slug, script);
 				if (direct && script.Active) {
 					if (!script.RegisterCommand())
 						Service.Plugin.Error($"Unable to register //{script.InternalName} - is it already in use?");
@@ -148,15 +146,15 @@ public class ScriptManager: IDisposable {
 	private bool disposed = false;
 
 	protected virtual void Dispose(bool disposing) {
-		if (this.disposed)
+		if (disposed)
 			return;
-		this.disposed = true;
+        disposed = true;
 
-		if (disposing) 			this.ClearAllScripts();
+		if (disposing) ClearAllScripts();
 	}
 
 	public void Dispose() {
-		this.Dispose(true);
+        Dispose(true);
 		GC.SuppressFinalize(this);
 	}
 

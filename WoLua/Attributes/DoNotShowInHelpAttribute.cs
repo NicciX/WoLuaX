@@ -1,6 +1,6 @@
 using System;
 
-namespace WoLua.Attributes;
+namespace WoLuaX.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 internal class DoNotShowInHelpAttribute: Attribute {

@@ -19,29 +19,29 @@ using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Platforms;
-using WoLua.Lua;
+using WoLuaX.Lua;
 using Dalamud.IoC;
 using Dalamud.Game;
 
 using System.Reflection;
-using WoLua.Ui;
-using WoLua.Ipc;
-using WoLua.Chat;
-using WoLua.Constants;
-using WoLua.Ui.Chat;
-using WoLua.Game;
-using WoLua.Lua.Api.Game;
-using WoLua.Api;
+using WoLuaX.Ui;
+using WoLuaX.Ipc;
+using WoLuaX.Chat;
+using WoLuaX.Constants;
+using WoLuaX.Ui.Chat;
+using WoLuaX.Game;
+using WoLuaX.Lua.Api.Game;
+using WoLuaX.Api;
 using Dalamud.Utility;
 
-namespace WoLua;
+namespace WoLuaX;
 
 public class Plugin: IDalamudPlugin {
 	public const InteropAccessMode TypeRegistrationMode = InteropAccessMode.BackgroundOptimized;
-	public const string Name = "WoLua";
+	public const string Name = "WoLuaX";
 
-	public const string Prefix = "WoLua";
-	public const string PluginName = "Wolua";
+	public const string Prefix = "WoLuaX";
+	public const string PluginName = "WoluaX";
 
 	[PluginService] internal static IDataManager Data { get; private set; } = null!;
 	[PluginService] internal static IGameInteropProvider Interop { get; private set; } = null!;

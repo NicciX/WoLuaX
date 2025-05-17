@@ -1,4 +1,4 @@
-namespace WoLua.Constants;
+namespace WoLuaX.Constants;
 
 public static class Metamethod {
 	public const string

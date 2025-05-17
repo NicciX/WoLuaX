@@ -7,14 +7,12 @@ using System.Xml.Linq;
 
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Serialization.Json;
-
 using WoLua.Lua;
 using WoLua.Lua.Docs;
+using WoLuaX.Constants;
+using WoLuaX.Ui.Chat;
 
-using WoLua.Constants;
-using WoLua.Ui.Chat;
-
-namespace WoLua.Lua.Api;
+namespace WoLuaX.Lua.Api;
 
 public abstract class ApiBase: IDisposable {
 	private const BindingFlags AllInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
@@ -38,17 +36,17 @@ public abstract class ApiBase: IDisposable {
 
 	[MoonSharpHidden]
 	public ApiBase(ScriptContainer source) {
-		Type me = this.GetType();
+		Type me = GetType();
 		Type apiBase = typeof(ApiBase);
 		Type disposable = typeof(IDisposable);
-		this.Owner = source;
-		//this.Name = "Unknown";
-		this.DefaultMessageTag = me.Name.ToUpper();
-		this.disposables = me
+        Owner = source;
+        //this.Name = "Unknown";
+        DefaultMessageTag = me.Name.ToUpper();
+        disposables = me
 			.GetProperties(AllInstance)
 			.Where(p => p.PropertyType.IsAssignableTo(disposable) && p.CanRead)
 			.ToArray();
-		this.wipeOnDispose = me
+        wipeOnDispose = me
 			.GetProperties(AllInstance)
 			.Where(p => p.CanWrite)
 			.Where(p => p.GetCustomAttribute<WipeOnDisposeAttribute>()?.Value is true)
@@ -67,16 +65,16 @@ public abstract class ApiBase: IDisposable {
 				continue;
 			//this.Name = p.Name;
 			p.SetValue(this, inject);
-			//this.SetName(p.Name);
-			this.Log($"Automatically injected {inject.GetType().Name} into {p.DeclaringType?.Name ?? me.Name}.{p.Name}", LogTag.ScriptLoader, true);
+            //this.SetName(p.Name);
+            Log($"Automatically injected {inject.GetType().Name} into {p.DeclaringType?.Name ?? me.Name}.{p.Name}", LogTag.ScriptLoader, true);
 		}
 	}
 
 	protected void Log(string message, string? tag = null, bool force = false) {
-		if (this.Disposed || this.Owner.Disposed)
+		if (Disposed || Owner.Disposed)
 			return;
 
-		this.Owner.Log(message, tag ?? this.DefaultMessageTag, force);
+        Owner.Log(message, tag ?? DefaultMessageTag, force);
 	}
 	protected void DeprecationWarning(string? alternative = null) {
 		StackFrame frame = new(1, true);
@@ -99,11 +97,11 @@ public abstract class ApiBase: IDisposable {
 			descriptor = $"{owner}.{name}({args})";
 			action = "called";
 		}
-		this.Log($"Deprecated API member {descriptor} {action}, issuing a warning to the user", LogTag.DeprecatedApiMember, true);
+        Log($"Deprecated API member {descriptor} {action}, issuing a warning to the user", LogTag.DeprecatedApiMember, true);
 		string message = $"{descriptor} is deprecated and should not be used.";
 		if (!string.IsNullOrWhiteSpace(alternative))
 			message += $" Please use {alternative} instead.";
-		Service.Plugin.Print(message, Foreground.Error, this.Owner.PrettyName);
+		Service.Plugin.Print(message, Foreground.Error, Owner.PrettyName);
 	}
 
 	protected internal static string ToUsefulString(DynValue value, bool typed = false)
@@ -129,7 +127,7 @@ public abstract class ApiBase: IDisposable {
 #pragma warning disable CA1822 // Mark members as static - MoonSharp only inherits metamethods if they're non-static
 
 	[MoonSharpUserDataMetamethod(Metamethod.Stringify)]
-	public override string ToString() => $"nil[{this.GetType().FullName}]";
+	public override string ToString() => $"nil[{GetType().FullName}]";
 
 	[MoonSharpUserDataMetamethod(Metamethod.Concatenate)]
 	public string MetamethodConcat(string left, ApiBase right) => $"{left}{right}";
@@ -143,32 +141,32 @@ public abstract class ApiBase: IDisposable {
 
 	#region IDisposable
 	protected virtual void Dispose(bool disposing) {
-		if (this.Disposed)
+		if (Disposed)
 			return;
-		this.Disposed = true;
+        Disposed = true;
 
-		this.Owner.Log(this.GetType().Name, LogTag.Dispose, true);
+        Owner.Log(GetType().Name, LogTag.Dispose, true);
 
-		foreach (PropertyInfo disposable in this.disposables) {
+		foreach (PropertyInfo disposable in disposables) {
 			(disposable.GetValue(this) as IDisposable)?.Dispose();
 			if (disposable.CanWrite)
 				disposable.SetValue(this, null);
 		}
 
-		foreach (PropertyInfo item in this.wipeOnDispose) {
+		foreach (PropertyInfo item in wipeOnDispose) {
 			item.SetValue(this, null);
 		}
 
-		this.Owner = null!;
+        Owner = null!;
 	}
 
 	~ApiBase() {
-		this.Dispose(false);
+        Dispose(false);
 	}
 
 	[MoonSharpHidden]
 	public void Dispose() {
-		this.Dispose(true);
+        Dispose(true);
 		GC.SuppressFinalize(this);
 	}
 	#endregion

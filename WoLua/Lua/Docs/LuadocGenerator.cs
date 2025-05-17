@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Interop;
-
+using WoLuaX.Constants;
+using WoLuaX.Lua.Api;
+using WoLuaX.Lua;
 using WoLua.Lua;
 using WoLua.Lua.Docs;
 
-using WoLua.Constants;
-using WoLua.Lua.Api;
-
-namespace WoLua.Lua.Docs;
+namespace WoLuaX.Lua.Docs;
 
 internal static class LuadocGenerator {
 	private static readonly Assembly ownAssembly = typeof(LuadocGenerator).Assembly;

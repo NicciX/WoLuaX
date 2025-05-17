@@ -21,7 +21,7 @@ using Dalamud.Game.Addon.Lifecycle;
 using System.ComponentModel;
 using WoLua.Lua;
 
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 public class EquipApi: ApiBase {
@@ -32,8 +32,8 @@ public class EquipApi: ApiBase {
 
 	//private unsafe void OnSetupContentsFinder(AddonEvent type, AddonArgs args) => Callback.Fire((AtkUnitBase*)args.Addon, true, 12, 0);
 
-	public bool Loaded => !this.Disposed
-		&& Service.ClientState.LocalPlayer is not null
+	public bool Loaded => !Disposed
+        && Service.ClientState.LocalPlayer is not null
 		&& Service.ClientState.LocalContentId is not 0;
 	public static implicit operator bool(EquipApi? player) => player?.Loaded ?? false;
 
@@ -70,18 +70,18 @@ public class EquipApi: ApiBase {
 		if (slotsLoaded) {
 			//return "Slots already loaded";
 		}
-		this.Head.Name = this.Head.SetName("Head");
-		this.Body.Name = this.Body.SetName("Body");
-		this.Hands.Name = this.Hands.SetName("Hands");
-		this.Legs.Name = this.Legs.SetName("Legs");
-		this.Feet.Name = this.Feet.SetName("Feet");
-		this.Weapon.Name = this.Weapon.SetName("Weapon");
-		this.Offhand.Name = this.Offhand.SetName("Offhand");
-		this.Ears.Name = this.Ears.SetName("Ears");
-		this.Neck.Name = this.Neck.SetName("Neck");
-		this.Wrist.Name = this.Wrist.SetName("Wrist");
-		this.RRing.Name = this.RRing.SetName("RRing");
-		this.LRing.Name = this.LRing.SetName("LRing");
+        Head.Name = Head.SetName("Head");
+        Body.Name = Body.SetName("Body");
+        Hands.Name = Hands.SetName("Hands");
+        Legs.Name = Legs.SetName("Legs");
+        Feet.Name = Feet.SetName("Feet");
+        Weapon.Name = Weapon.SetName("Weapon");
+        Offhand.Name = Offhand.SetName("Offhand");
+        Ears.Name = Ears.SetName("Ears");
+        Neck.Name = Neck.SetName("Neck");
+        Wrist.Name = Wrist.SetName("Wrist");
+        RRing.Name = RRing.SetName("RRing");
+        LRing.Name = LRing.SetName("LRing");
 		slotsLoaded = true;
 		return "Slots Loaded";
 	}
@@ -129,48 +129,48 @@ public class EquipApi: ApiBase {
 			Service.Log.Error("Cannot remove weapon");
 			return;
 		}
-		if (name == "Offhand" && this.Offhand.Item > 0) {
-			this.Offhand.Remove();
+		if (name == "Offhand" && Offhand.Item > 0) {
+            Offhand.Remove();
 			return;
 		}
-		else if (name == "Head" && this.Head.Item > 0) {
-			this.Head.Remove();
+		else if (name == "Head" && Head.Item > 0) {
+            Head.Remove();
 			return;
 		}
-		else if (name == "Body" && this.Body.Item > 0) {
-			this.Body.Remove();
+		else if (name == "Body" && Body.Item > 0) {
+            Body.Remove();
 			return;
 		}
-		else if (name == "Hands" && this.Hands.Item > 0) {
-			this.Hands.Remove();
+		else if (name == "Hands" && Hands.Item > 0) {
+            Hands.Remove();
 			return;
 		}
-		else if (name == "Legs" && this.Legs.Item > 0) {
-			this.Legs.Remove();
+		else if (name == "Legs" && Legs.Item > 0) {
+            Legs.Remove();
 			return;
 		}
-		else if (name == "Feet" && this.Feet.Item > 0) {
-			this.Feet.Remove();
+		else if (name == "Feet" && Feet.Item > 0) {
+            Feet.Remove();
 			return;
 		}
-		else if (name == "Ears" && this.Ears.Item > 0) {
-			this.Ears.Remove();
+		else if (name == "Ears" && Ears.Item > 0) {
+            Ears.Remove();
 			return;
 		}
-		else if (name == "Neck" && this.Neck.Item > 0) {
-			this.Neck.Remove();
+		else if (name == "Neck" && Neck.Item > 0) {
+            Neck.Remove();
 			return;
 		}
-		else if (name == "Wrist" && this.Wrist.Item > 0) {
-			this.Wrist.Remove();
+		else if (name == "Wrist" && Wrist.Item > 0) {
+            Wrist.Remove();
 			return;
 		}
-		else if (name == "RRing" && this.RRing.Item > 0) {
-			this.RRing.Remove();
+		else if (name == "RRing" && RRing.Item > 0) {
+            RRing.Remove();
 			return;
 		}
-		else if (name == "LRing" && this.LRing.Item > 0) {
-			this.LRing.Remove();
+		else if (name == "LRing" && LRing.Item > 0) {
+            LRing.Remove();
 			return;
 		}
 		else {

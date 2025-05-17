@@ -6,12 +6,11 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 
 using MoonSharp.Interpreter;
-
-using WoLua;
-using WoLua.Constants;
-using WoLua.Lua;
-using WoLua.Lua.Api;
-using WoLua.Ui.Chat;
+using WoLuaX;
+using WoLuaX.Constants;
+using WoLuaX.Lua;
+using WoLuaX.Lua.Api;
+using WoLuaX.Ui.Chat;
 
 namespace WoLua.Lua;
 

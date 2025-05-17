@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 #nullable disable
 public class Inventory

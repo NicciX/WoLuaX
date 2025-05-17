@@ -7,11 +7,10 @@ using Dalamud.Plugin.Services;
 using MoonSharp.Interpreter;
 
 using WoLua.Lua;
+using WoLuaX.Constants;
+using WoLuaX.Lua.Actions;
 
-using WoLua.Constants;
-using WoLua.Lua.Actions;
-
-namespace WoLua.Lua;
+namespace WoLuaX.Lua;
 
 [SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "It's a queue for script actions")]
 public class ActionQueue: IDisposable {
@@ -21,58 +20,58 @@ public class ActionQueue: IDisposable {
 	public ScriptContainer Script { get; private set; }
 
 	public ActionQueue(ScriptContainer source) {
-		this.Script = source;
-		Service.Framework.Update += this.tick;
+        Script = source;
+		Service.Framework.Update += tick;
 	}
 
-	public int Count => this.queue.Count;
+	public int Count => queue.Count;
 
 	internal void Clear()
-		=> this.queue.Clear();
+		=> queue.Clear();
 	internal void Add(ScriptAction action)
-		=> this.queue.Enqueue(action);
+		=> queue.Enqueue(action);
 
 	public bool? PullEvent() {
 		if (!Service.ClientState.IsLoggedIn || Service.GameLifecycle.LogoutToken.IsCancellationRequested || Service.GameLifecycle.DalamudUnloadingToken.IsCancellationRequested || Service.GameLifecycle.GameShuttingDownToken.IsCancellationRequested) {
-			this.Clear();
+            Clear();
 			return null;
 		}
-		if (DateTime.Now < this.ActionThreshold)
+		if (DateTime.Now < ActionThreshold)
 			return null;
-		if (!this.queue.TryDequeue(out ScriptAction? action))
+		if (!queue.TryDequeue(out ScriptAction? action))
 			return false;
-		this.Script.Log(action.ToString(), LogTag.ActionQueue);
-		action.Run(this.Script);
+        Script.Log(action.ToString(), LogTag.ActionQueue);
+		action.Run(Script);
 		return true;
 	}
 
-	private void tick(IFramework framework) => this.PullEvent();
+	private void tick(IFramework framework) => PullEvent();
 
 	#region IDisposable
 	private bool disposed = false;
 
 	protected virtual void Dispose(bool disposing) {
-		if (this.disposed)
+		if (disposed)
 			return;
-		this.disposed = true;
+        disposed = true;
 
 		if (disposing) {
-			Service.Framework.Update -= this.tick;
-			this.Clear();
+			Service.Framework.Update -= tick;
+            Clear();
 		}
 
-		this.Script.Log(this.GetType().Name, LogTag.Dispose, true);
+        Script.Log(GetType().Name, LogTag.Dispose, true);
 
-		this.Script = null!;
+        Script = null!;
 	}
 
 	~ActionQueue() {
-		this.Dispose(false);
+        Dispose(false);
 	}
 
 	[MoonSharpHidden]
 	public void Dispose() {
-		this.Dispose(true);
+        Dispose(true);
 		GC.SuppressFinalize(this);
 	}
 	#endregion

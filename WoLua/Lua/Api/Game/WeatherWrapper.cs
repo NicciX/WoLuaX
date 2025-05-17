@@ -5,12 +5,10 @@ using Lumina.Excel;
 using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
-
 using WoLua.Lua.Docs;
+using WoLuaX.Constants;
 
-using WoLua.Constants;
-
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember(nameof(Equals))]
@@ -34,16 +32,16 @@ public sealed record class WeatherWrapper: IEquatable<WeatherWrapper> {
 	public string Description { get; init; }
 
 	[LuaDoc("Whether this object represents a real type of weather (with an actual name and description).")]
-	public bool Valid => this.Id > 0 && !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.Description);
+	public bool Valid => Id > 0 && !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Description);
 	public static implicit operator bool(WeatherWrapper? wrapper) => wrapper?.Valid ?? false;
 
 	[LuaDoc("The player-friendly name of this weather, except in lowercase.")]
-	public override string ToString() => this.Name.ToLower();
+	public override string ToString() => Name.ToLower();
 
 	public WeatherWrapper(uint id) {
-		this.Id = id;
-		this.Name = weatherNames.TryGetValue(this.Id, out string? name) ? name : string.Empty;
-		this.Description = weatherDescriptions.TryGetValue(this.Id, out string? desc) ? desc : string.Empty;
+        Id = id;
+        Name = weatherNames.TryGetValue(Id, out string? name) ? name : string.Empty;
+        Description = weatherDescriptions.TryGetValue(Id, out string? desc) ? desc : string.Empty;
 	}
 
 	#region Initialisation

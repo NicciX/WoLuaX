@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace WoLua;
+namespace WoLuaX;
 
 public class SingleExecutionTask {
 	private readonly Action func;
@@ -10,14 +10,14 @@ public class SingleExecutionTask {
 	public bool Running {
 		get {
 			lock (this) {
-				return this.Task.Status is TaskStatus.Running;
+				return Task.Status is TaskStatus.Running;
 			}
 		}
 	}
 	public bool Completed {
 		get {
 			lock (this) {
-				return this.Task.IsCompleted;
+				return Task.IsCompleted;
 			}
 		}
 	}
@@ -26,12 +26,12 @@ public class SingleExecutionTask {
 
 	public bool TryRun() {
 		lock (this) {
-			if (this.Completed) {
-				this.Task = Task.Run(this.func);
+			if (Completed) {
+                Task = Task.Run(func);
 				return true;
 			}
 		}
 		return false;
 	}
-	public void Run() => this.TryRun();
+	public void Run() => TryRun();
 }

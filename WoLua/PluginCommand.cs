@@ -4,29 +4,28 @@ using System.Linq;
 using System.Reflection;
 
 using Dalamud.Game.Command;
+using WoLuaX.Attributes;
+using WoLuaX.Chat;
+using WoLuaX.Utils;
 
-using WoLua.Attributes;
-using WoLua.Chat;
-using WoLua.Utils;
-
-namespace WoLua;
+namespace WoLuaX;
 
 public abstract class PluginCommand: IDisposable {
 	protected bool Disposed { get; set; } = false;
 
-	public CommandInfo MainCommandInfo => new(this.Dispatch) {
-		HelpMessage = this.Summary,
-		ShowInHelp = this.ShowInDalamud,
+	public CommandInfo MainCommandInfo => new(Dispatch) {
+		HelpMessage = Summary,
+		ShowInHelp = ShowInDalamud,
 	};
-	public CommandInfo AliasCommandInfo => new(this.Dispatch) {
-		HelpMessage = this.Summary,
+	public CommandInfo AliasCommandInfo => new(Dispatch) {
+		HelpMessage = Summary,
 		ShowInHelp = false,
 	};
-	public string CommandComparable => this.Command.TrimStart('/').ToLower();
-	public IEnumerable<string> AliasesComparable => this.Aliases.Select(s => s.TrimStart('/').ToLower());
-	public IEnumerable<string> HelpLines => this.Help.Split('\r', '\n').Where(s => !string.IsNullOrWhiteSpace(s));
-	public IEnumerable<string> InvocationNames => (new string[] { this.Command }).Concat(this.Aliases);
-	public IEnumerable<string> InvocationNamesComparable => (new string[] { this.CommandComparable }).Concat(this.AliasesComparable);
+	public string CommandComparable => Command.TrimStart('/').ToLower();
+	public IEnumerable<string> AliasesComparable => Aliases.Select(s => s.TrimStart('/').ToLower());
+	public IEnumerable<string> HelpLines => Help.Split('\r', '\n').Where(s => !string.IsNullOrWhiteSpace(s));
+	public IEnumerable<string> InvocationNames => (new string[] { Command }).Concat(Aliases);
+	public IEnumerable<string> InvocationNamesComparable => (new string[] { CommandComparable }).Concat(AliasesComparable);
 	public string Command { get; }
 	public string Summary { get; }
 	public string Help { get; }
@@ -41,14 +40,14 @@ public abstract class PluginCommand: IDisposable {
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 	protected PluginCommand() {
-		Type t = this.GetType();
+		Type t = GetType();
 		CommandAttribute attrCommand = t.GetCustomAttribute<CommandAttribute>() ?? throw new InvalidOperationException("Cannot construct PluginCommand from type without CommandAttribute");
 		ArgumentsAttribute? args = t.GetCustomAttribute<ArgumentsAttribute>();
-		this.Command = $"/{attrCommand.Command.TrimStart('/')}";
-		this.Summary = t.GetCustomAttribute<SummaryAttribute>()?.Summary ?? "";
-		this.Help = this.ModifyHelpMessage(t.GetCustomAttribute<HelpTextAttribute>()?.HelpMessage ?? "");
-		this.Usage = $"{this.Command} {args?.ArgumentDescription}".Trim();
-		this.Aliases = (new string[] { "9999p" + this.Command.TrimStart('/') })
+        Command = $"/{attrCommand.Command.TrimStart('/')}";
+        Summary = t.GetCustomAttribute<SummaryAttribute>()?.Summary ?? "";
+        Help = ModifyHelpMessage(t.GetCustomAttribute<HelpTextAttribute>()?.HelpMessage ?? "");
+        Usage = $"{Command} {args?.ArgumentDescription}".Trim();
+        Aliases = (new string[] { "9999p" + Command.TrimStart('/') })
 			.Concat(
 				attrCommand.Aliases
 					.Select(s => s.TrimStart('/'))
@@ -57,13 +56,13 @@ public abstract class PluginCommand: IDisposable {
 			.OrderBy(s => s)
 			.Select(s => "/" + s[4..])
 			.ToArray();
-		this.ShowInListing = t.GetCustomAttribute<HideInCommandListingAttribute>() is null;
-		this.ShowInDalamud = this.ShowInListing && (t.GetCustomAttribute<DoNotShowInHelpAttribute>() is null || string.IsNullOrEmpty(this.Summary));
+        ShowInListing = t.GetCustomAttribute<HideInCommandListingAttribute>() is null;
+        ShowInDalamud = ShowInListing && (t.GetCustomAttribute<DoNotShowInHelpAttribute>() is null || string.IsNullOrEmpty(Summary));
 
-		this.InternalName = t.Name;
+        InternalName = t.Name;
 
-		if (this.Plugin is null)
-			Plugin.Log.Warning($"{this.InternalName}.Plugin is null in constructor - this should not happen!");
+		if (Plugin is null)
+			Plugin.Log.Warning($"{InternalName}.Plugin is null in constructor - this should not happen!");
 	}
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -71,8 +70,8 @@ public abstract class PluginCommand: IDisposable {
 	protected virtual string ModifyHelpMessage(string original) => original;
 	protected virtual void Initialise() { }
 	internal void Setup() {
-		Plugin.Log.Information($"Initialising {this.InternalName}");
-		this.Initialise();
+		Plugin.Log.Information($"Initialising {InternalName}");
+        Initialise();
 	}
 
 	protected static void Assert(bool succeeds, string message) {
@@ -81,8 +80,8 @@ public abstract class PluginCommand: IDisposable {
 	}
 
 	public void Dispatch(string command, string argline) {
-		if (this.Disposed)
-			throw new ObjectDisposedException(this.InternalName, "Plugin command has already been disposed");
+		if (Disposed)
+			throw new ObjectDisposedException(InternalName, "Plugin command has already been disposed");
 
 		Plugin.Log.Information($"Command invocation: [{command}] [{argline}]");
 		try {
@@ -96,12 +95,12 @@ public abstract class PluginCommand: IDisposable {
 				Plugin.CommandManager.HelpHandler?.Execute(null, command, flags, verbose, dryRun, ref showHelp);
 				return;
 			}
-			this.Execute(command, rawArguments, flags, verbose, dryRun, ref showHelp);
+            Execute(command, rawArguments, flags, verbose, dryRun, ref showHelp);
 			if (showHelp)
 				Plugin.CommandManager.HelpHandler?.Execute(null, command, flags, verbose, dryRun, ref showHelp);
 		}
 		catch (CommandAssertionFailureException e) {
-			Plugin.Log.Error(e, $"Command assert failed: {this.Command}: {e.Message}");
+			Plugin.Log.Error(e, $"Command assert failed: {Command}: {e.Message}");
 			Plugin.CommandManager.ErrorHandler?.Invoke($"Internal assertion check failed:\n{e.Message}");
 		}
 		catch (Exception e) {
@@ -122,15 +121,15 @@ public abstract class PluginCommand: IDisposable {
 
 	#region IDisposable
 	protected virtual void Dispose(bool disposing) {
-		if (this.Disposed)
+		if (Disposed)
 			return;
-		this.Disposed = true;
+        Disposed = true;
 
-		this.Plugin = null!;
+        Plugin = null!;
 	}
 
 	public void Dispose() {
-		this.Dispose(true);
+        Dispose(true);
 		GC.SuppressFinalize(this);
 	}
 	#endregion

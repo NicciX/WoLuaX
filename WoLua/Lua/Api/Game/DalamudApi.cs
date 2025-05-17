@@ -7,11 +7,10 @@ using MoonSharp.Interpreter;
 
 using WoLua.Lua;
 using WoLua.Lua.Docs;
+using WoLuaX.Lua.Api;
+using WoLuaX;
 
-using WoLua;
-using WoLua.Lua.Api;
-
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 public class DalamudApi: ApiBase {
@@ -25,7 +24,7 @@ public class DalamudApi: ApiBase {
 
 	private IExposedPlugin? findPlugin(string name) {
 		IExposedPlugin[] plugins = Service.Interface.InstalledPlugins.ToArray();
-		this.Log($"Checking {plugins.Length} installed plugins for {name}");
+        Log($"Checking {plugins.Length} installed plugins for {name}");
 		return plugins.FirstOrDefault(p => p.InternalName == name);
 	}
 
@@ -34,14 +33,14 @@ public class DalamudApi: ApiBase {
 		+ " SemVer treats major version increments as **backwards-incompatible**, which would mean that a different value is potentially not compatible with whatever the script may wish to do."
 		+ " However, plugin versions _do not_ use SemVer, so this may not always be correct. Talk to the plugin author if you have a problem (and tell them to use a sane versioning scheme).")]
 	public bool HasPlugin(string pluginName, string? version = null) {
-		IExposedPlugin? found = this.findPlugin(pluginName);
+		IExposedPlugin? found = findPlugin(pluginName);
 
 		if (found is null) {
-			this.Log($"{pluginName} is not installed");
+            Log($"{pluginName} is not installed");
 			return false;
 		}
 		if (!found.IsLoaded) {
-			this.Log($"{found.Name} is installed but not loaded");
+            Log($"{found.Name} is installed but not loaded");
 			return false;
 		}
 
@@ -52,12 +51,12 @@ public class DalamudApi: ApiBase {
 		}
 		if (wanted is not null) {
 			if (found.Version.Major != wanted.Major || found.Version < wanted) {
-				this.Log($"{found.Name} v{found.Version} is loaded, but not compatible with v{wanted}");
+                Log($"{found.Name} v{found.Version} is loaded, but not compatible with v{wanted}");
 				return false;
 			}
 		}
 
-		this.Log($"{found.Name} v{found.Version} is loaded{(wanted is not null ? $" and compatible with v{wanted}" : string.Empty)}");
+        Log($"{found.Name} v{found.Version} is loaded{(wanted is not null ? $" and compatible with v{wanted}" : string.Empty)}");
 		return true;
 	}
 

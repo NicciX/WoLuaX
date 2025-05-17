@@ -12,14 +12,12 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
 using Lumina.Excel;
 using Lumina.Excel.Sheets;
-
 using WoLua.Attributes;
-using WoLua.Chat;
-using WoLua.Utils;
-
+using WoLuaX.Chat;
+using WoLuaX.Utils;
 using CSGO = FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject; // Client Structs Game Object, not Counter Strike Global Offensive :P
 
-namespace WoLua;
+namespace WoLuaX;
 
 [Command("/whereis", "/locate", "/find")]
 [Summary("Find nearby objects, players, and NPCs by name")]
@@ -48,15 +46,15 @@ public unsafe class LocateGameObjectCommand: PluginCommand {
 		}
 
 		int invisibleFlags = 0
-			| (1 << 1) // hide model
-			| (1 << 11); // hide nameplate
+			| 1 << 1 // hide model
+			| 1 << 11; // hide nameplate
 
 		string needle = rawArguments.Trim();
 		Vector3 here = Plugin.Client.LocalPlayer!.Position;
 		IEnumerable<(string name, Vector3 position, float distance)> found = Plugin.Objects
 			.Where(o =>
 				(flags['A'] || o.ObjectKind is ObjectKind.BattleNpc or ObjectKind.Player or ObjectKind.EventNpc or ObjectKind.EventObj or ObjectKind.Companion)
-				&& (flags['a'] || ((CSGO*)o.Address)->GetIsTargetable() || (((CSGO*)o.Address)->RenderFlags & invisibleFlags) != invisibleFlags || (((CSGO*)o.Address)->DrawObject is not null))
+				&& (flags['a'] || ((CSGO*)o.Address)->GetIsTargetable() || (((CSGO*)o.Address)->RenderFlags & invisibleFlags) != invisibleFlags || ((CSGO*)o.Address)->DrawObject is not null)
 				&& o.Name.TextValue.Contains(needle, StringComparison.OrdinalIgnoreCase)
 			)
 			.Select(o => (o.Name.TextValue.Trim(), o.Position, Vector3.Distance(o.Position, here)));

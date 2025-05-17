@@ -1,4 +1,4 @@
-namespace WoLua.Game;
+namespace WoLuaX.Game;
 
 public enum Sound: byte {
 	None = 0x00,

@@ -1,9 +1,9 @@
 using System;
 
-namespace WoLua.Lua;
+namespace WoLuaX.Lua;
 
 [AttributeUsage(AttributeTargets.Property)]
 internal class LuaGlobalAttribute: Attribute {
 	public readonly string Name;
-	public LuaGlobalAttribute(string name) => this.Name = name;
+	public LuaGlobalAttribute(string name) => Name = name;
 }

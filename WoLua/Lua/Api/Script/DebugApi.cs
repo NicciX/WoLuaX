@@ -6,12 +6,10 @@ using MoonSharp.Interpreter.Serialization.Json;
 
 using WoLua.Lua;
 using WoLua.Lua.Docs;
+using WoLuaX.Constants;
+using WoLuaX.Lua.Api;
 
-using WoLua;
-using WoLua.Constants;
-using WoLua.Lua.Api;
-
-namespace WoLua.Lua.Api.Script;
+namespace WoLuaX.Lua.Api.Script;
 
 [MoonSharpUserData]
 public class DebugApi: ApiBase {
@@ -47,27 +45,27 @@ public class DebugApi: ApiBase {
 
 	[LuaDoc("Prints the given (singular, string) message to the plugin debug log, accessible via dalamud's `/xllog` command.")]
 	public void PrintString(string message) {
-		if (this.Disposed)
+		if (Disposed)
 			return;
 
-		this.Log(message, LogTag.DebugMessage);
+        Log(message, LogTag.DebugMessage);
 	}
 
 	[MoonSharpUserDataMetamethod(Metamethod.FunctionCall)]
 	[LuaDoc("Prints all given values to the plugin debug log, accessible via dalamud's `/xllog` command.",
 		"Special values will be converted to the most useful string form available, such as tables rendering into JSON.")]
 	public void Print(params DynValue[] values) {
-		if (this.Disposed)
+		if (Disposed)
 			return;
 
-		this.PrintString(string.Join(" ", values.Select(dv => ToUsefulString(dv))));
+        PrintString(string.Join(" ", values.Select(dv => ToUsefulString(dv))));
 	}
 
 	[MoonSharpHidden]
 	// This isn't exposed to the scripts themselves because it's basically a nearly-nop filler, but it's still part of the debug API so it goes in here
 	public string Input(string prompt) {
-		if (!this.Disposed)
-			this.Log(prompt, LogTag.ScriptInput);
+		if (!Disposed)
+            Log(prompt, LogTag.ScriptInput);
 
 		return string.Empty;
 	}
@@ -75,26 +73,26 @@ public class DebugApi: ApiBase {
 	[LuaDoc("Dumps the script's CURRENT storage contents to the plugin debug log as JSON, accessible via dalamud's `/xllog` command.",
 		"This is not necessarily the value stored on disk, as the script may have modified it but not yet called the save/reload method.")]
 	public void DumpStorage() {
-		if (this.Disposed)
+		if (Disposed)
 			return;
 
-		this.Log(this.Owner.ScriptApi.Storage.TableToJson(), LogTag.ScriptStorage);
+        Log(Owner.ScriptApi.Storage.TableToJson(), LogTag.ScriptStorage);
 	}
 
 	[LuaDoc("Dumps each individual value as a separate in the plugin debug log, accessible via dalamud's `/xllog` command.",
 		"Special values will be converted to the most useful string form available, such as tables rendering into JSON.",
 		"Each value will be prefixed with its type.")]
 	public void Dump(params DynValue[] values) {
-		if (this.Disposed)
+		if (Disposed)
 			return;
 
-		this.PrintString($"BEGIN VALUE DUMP: {values.Length}");
+        PrintString($"BEGIN VALUE DUMP: {values.Length}");
 		int size = values.Length.ToString().Length;
 		for (int i = 0; i < values.Length; ++i) {
 			DynValue v = values[i];
-			this.PrintString($"{(i + 1).ToString().PadLeft(size)}: {ToUsefulString(v, true)}");
+            PrintString($"{(i + 1).ToString().PadLeft(size)}: {ToUsefulString(v, true)}");
 		}
-		this.PrintString("END VALUE DUMP");
+        PrintString("END VALUE DUMP");
 	}
 
 }

@@ -12,13 +12,13 @@ using MoonSharp.Interpreter;
 using WoLua.Api;
 using WoLua.Lua;
 using WoLua.Lua.Docs;
+using WoLuaX.Lua.Docs;
+using WoLuaX.Lua.Api.Game;
+using WoLuaX.Constants;
+using WoLuaX.Ui.Chat;
+using WoLuaX.Game;
 
-using WoLua.Constants;
-using WoLua.Game;
-using WoLua.Lua.Api.Game;
-using WoLua.Ui.Chat;
-
-namespace WoLua.Lua.Api;
+namespace WoLuaX.Lua.Api;
 
 // This API is for everything pertaining to the actual game, including holding more specific APIs.
 [MoonSharpUserData]
@@ -47,7 +47,7 @@ public class GameApi: ApiBase {
 	[LuaDoc($"Prints a message into the user's local chat log using {Plugin.Name}'s default colour.",
 		$"The message will be automatically prefixed with `[{Plugin.Name}]` and the script's name for clarity.")]
 	public void PrintMessage([AsLuaType(LuaType.Any), LuaDoc("Multiple values will be concatenated with a single space")] params DynValue[] messages) {
-		if (this.Disposed)
+		if (Disposed)
 			return;
 		if (messages.Length == 0)
 			return;
@@ -56,34 +56,34 @@ public class GameApi: ApiBase {
 			" ",
 			messages.Select(dv => ToUsefulString(dv))
 		);
-		this.Log(message, LogTag.LocalChat);
-		Service.Plugin.Print(message, null, this.Owner.PrettyName);
+        Log(message, LogTag.LocalChat);
+		Service.Plugin.Print(message, null, Owner.PrettyName);
 	}
 
 	[LuaDoc("Prints a message into the user's local chat log in red.",
 		$"The message will be automatically prefixed with `[{Plugin.Name}]` and the script's name for clarity.")]
 	public void PrintError([AsLuaType(LuaType.Any), LuaDoc("Multiple values will be concatenated with a single space")] params DynValue[] messages) {
-		if (this.Disposed)
+		if (Disposed)
 			return;
 
 		string message = string.Join(
 			" ",
 			messages.Select(dv => ToUsefulString(dv))
 		);
-		this.Log(message, LogTag.LocalChat);
-		Service.Plugin.Print(message, Foreground.Error, this.Owner.PrettyName);
+        Log(message, LogTag.LocalChat);
+		Service.Plugin.Print(message, Foreground.Error, Owner.PrettyName);
 	}
 
 	[LuaDoc("Sends text to the game as if the user had typed it into their chat box themselves.",
 		"***THIS IS DANGEROUS.***",
 		"If the text to be sent does NOT start with a '/' then it will be treated as a **plain chat message**. USE **EXTREME** CAUTION.")]
 	public void SendChat(string chatline) {
-		if (this.Disposed)
+		if (Disposed)
 			return;
 
 		string cleaned = Service.ServerChat.SanitiseText(chatline);
 		if (!string.IsNullOrWhiteSpace(cleaned)) {
-			this.Log(cleaned, LogTag.ServerChat);
+            Log(cleaned, LogTag.ServerChat);
 			Service.ServerChat.SendMessage(cleaned);
 		}
 	}
@@ -100,9 +100,9 @@ public class GameApi: ApiBase {
 		"If no such entity could be found, the returned EntityWrapper will point to nothing.",
 		"This is an intensive method, since it must examine EVERY nearby game object to find matches, then identify the nearest one. Please cache the return value during execution frames.")]
 	public EntityWrapper FindNearestEntity(string name) {
-		this.Log($"Searching object table for name: {name}", LogTag.ObjectTable);
-		return this.NearbyEntities
-			.Where(o => o.Name == name)
+        Log($"Searching object table for name: {name}", LogTag.ObjectTable);
+		return NearbyEntities
+            .Where(o => o.Name == name)
 			.OrderBy(e => e.Distance)
 			.FirstOrDefault(EntityWrapper.Empty);
 	}
@@ -114,9 +114,9 @@ public class GameApi: ApiBase {
 	public IEnumerable<FateWrapper> Fates => Service.FateTable.Select(f => new FateWrapper(f)).Where(f => f.Exists).ToList();
 
 	public FateWrapper FindFate(string name) {
-		this.Log($"Searching FATE table for name: {name}", LogTag.FateTable);
-		return this.Fates
-			.Where(f => f.Exists && f.Name == name)
+        Log($"Searching FATE table for name: {name}", LogTag.FateTable);
+		return Fates
+            .Where(f => f.Exists && f.Name == name)
 			.OrderBy(f => f.DistanceToCentre)
 			.FirstOrDefault(FateWrapper.Empty);
 	}
@@ -155,7 +155,7 @@ public class GameApi: ApiBase {
 	[LuaDoc("Sets the player's custom map flag marker to the location of the provided game world object or position.")]
 	public void SetMapFlag([AsLuaType("EntityWrapper|FateWrapper|PlayerApi|WorldPosition")] IWorldObjectWrapper pos) {
 		if (pos.MapX is float x && pos.MapY is float y)
-			this.SetMapFlag(x, y);
+            SetMapFlag(x, y);
 	}
 
 	#endregion
@@ -164,7 +164,7 @@ public class GameApi: ApiBase {
 		"Using an ID that isn't in the range of 1-16 (inclusive) will silently fail. With an emphasis on silently.")]
 	[return: LuaDoc("`true` if the provided sound effect ID was a valid sound, `false` if it wasn't, or `nil` if there was an internal error")]
 	public bool? PlaySoundEffect(int id) {
-		if (this.Disposed)
+		if (Disposed)
 			return null;
 
 		if (!Service.Sounds.Valid)

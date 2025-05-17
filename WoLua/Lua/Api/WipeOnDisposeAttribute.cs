@@ -1,10 +1,10 @@
 using System;
 
-namespace WoLua.Lua.Api;
+namespace WoLuaX.Lua.Api;
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 internal class WipeOnDisposeAttribute: Attribute {
 	public bool Value { get; init; }
-	public WipeOnDisposeAttribute(bool value) => this.Value = value;
+	public WipeOnDisposeAttribute(bool value) => Value = value;
 	public WipeOnDisposeAttribute() : this(true) { }
 }

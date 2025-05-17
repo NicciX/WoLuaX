@@ -7,10 +7,9 @@ using Dalamud.Utility;
 using Lumina.Excel.Sheets;
 
 using MoonSharp.Interpreter;
-
 using WoLua.Lua.Docs;
 
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember(nameof(Equals))]
@@ -19,7 +18,7 @@ namespace WoLua.Lua.Api.Game;
 public sealed record class WorldPosition(float? PosX, float? PosY, float? PosZ): IWorldObjectWrapper, IEquatable<WorldPosition>, IComparable<WorldPosition> { // TODO luadoc all of this
 	public static readonly WorldPosition Empty = new(null, null, null);
 
-	public bool Exists => this.PosX is not null && this.PosY is not null;
+	public bool Exists => PosX is not null && PosY is not null;
 	public static implicit operator bool(WorldPosition? position) => position?.Exists is true;
 
 	public static implicit operator Vector2(WorldPosition? pos) => new(pos?.PosX ?? 0, pos?.PosY ?? 0);
@@ -33,12 +32,12 @@ public sealed record class WorldPosition(float? PosX, float? PosY, float? PosZ):
 	public float? FlatDistanceFrom([AsLuaType("EntityWrapper|FateWrapper|PlayerApi|WorldPosition")] IWorldObjectWrapper? other) => this && other?.Exists is true
 		? Vector2.Distance(this, other.Position)
 		: null;
-	public float? FlatDistance => this.FlatDistanceFrom(FromGameObject(Service.ClientState.LocalPlayer));
+	public float? FlatDistance => FlatDistanceFrom(FromGameObject(Service.ClientState.LocalPlayer));
 
 	public float? DistanceFrom([AsLuaType("EntityWrapper|FateWrapper|PlayerApi|WorldPosition")] IWorldObjectWrapper? other) => this && other?.Exists is true
-		? Vector3.Distance(this.GameEnginePosition, other!.Position.GameEnginePosition)
+		? Vector3.Distance(GameEnginePosition, other!.Position.GameEnginePosition)
 		: null;
-	public float? Distance => this.DistanceFrom(FromGameObject(Service.ClientState.LocalPlayer));
+	public float? Distance => DistanceFrom(FromGameObject(Service.ClientState.LocalPlayer));
 
 	internal Vector3? UiCoords {
 		get {
@@ -48,7 +47,7 @@ public sealed record class WorldPosition(float? PosX, float? PosY, float? PosZ):
 			if (zone > 0) {
 				Map? map = Service.DataManager.GetExcelSheet<Map>()!.GetRowOrDefault(zone);
 				TerritoryTypeTransient? territoryTransient = Service.DataManager.GetExcelSheet<TerritoryTypeTransient>()!.GetRowOrDefault(zone);
-				if (map.HasValue && territoryTransient.HasValue) 					return MapUtil.WorldToMap(this.GameEnginePosition, map.Value, territoryTransient.Value, true);
+				if (map.HasValue && territoryTransient.HasValue) 					return MapUtil.WorldToMap(GameEnginePosition, map.Value, territoryTransient.Value, true);
 			}
 			return null;
 		}
@@ -57,7 +56,7 @@ public sealed record class WorldPosition(float? PosX, float? PosY, float? PosZ):
 	public float? MapY => this?.UiCoords?.Y;
 	public float? MapZ => this?.UiCoords?.Z;
 
-	public override string ToString() => $"(x:{this.MapX}, y:{this.MapY}" + (this.MapZ is float z ? $", z:{z}" : "") + ")";
+	public override string ToString() => $"(x:{MapX}, y:{MapY}" + (MapZ is float z ? $", z:{z}" : "") + ")";
 
 	[MoonSharpHidden] // implemented only because it's necessary for the IWorldObjectWrapper interface
 	public WorldPosition Position => this;
@@ -68,12 +67,12 @@ public sealed record class WorldPosition(float? PosX, float? PosY, float? PosZ):
 		if (other is null)
 			return 1;
 		float distA, distB;
-		if (this.PosZ is not null && other.PosZ is not null) {
-			distA = this.Distance!.Value;
+		if (PosZ is not null && other.PosZ is not null) {
+			distA = Distance!.Value;
 			distB = other.Distance!.Value;
 		}
 		else {
-			distA = this.FlatDistance!.Value;
+			distA = FlatDistance!.Value;
 			distB = other.FlatDistance!.Value;
 		}
 		return distA < distB

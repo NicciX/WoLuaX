@@ -5,12 +5,12 @@ using Dalamud.Game.ClientState.Fates;
 using MoonSharp.Interpreter;
 
 using WoLua.Lua.Docs;
-using WoLua.Constants;
 
 using Fate = Dalamud.Game.ClientState.Fates.IFate;
 using FateContext = FFXIVClientStructs.FFXIV.Client.Game.Fate.FateContext;
+using WoLuaX.Constants;
 
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 [MoonSharpHideMember(nameof(WorldFate))]
@@ -20,21 +20,21 @@ namespace WoLua.Lua.Api.Game;
 public sealed record class FateWrapper(Fate? WorldFate): IWorldObjectWrapper {
 	public static readonly FateWrapper Empty = new((Fate?)null);
 
-	internal unsafe FateContext* Struct => this.Valid ? (FateContext*)this.WorldFate!.Address : null;
+	internal unsafe FateContext* Struct => Valid ? (FateContext*)WorldFate!.Address : null;
 
 	[LuaDoc("Whether this FATE is a valid object in the game's memory. If this is false, this wrapper is meaningless.")]
-	public bool Valid => this.WorldFate is Fate fate && Service.ClientState.LocalPlayer?.IsValid() is true;
+	public bool Valid => WorldFate is Fate fate && Service.ClientState.LocalPlayer?.IsValid() is true;
 
 	[LuaDoc("Whether this FATE still exists in the world. This will be true if the FATE is valid and has not yet ended, even if it is WAITING to end.")]
-	public bool Exists => this.State is not (FateState.Ended or FateState.Failed);
+	public bool Exists => State is not (FateState.Ended or FateState.Failed);
 
 	#region Display
 
 	[LuaDoc("The name of this FATE.")]
-	public string? Name => this.Valid ? this.WorldFate!.Name.TextValue : null;
+	public string? Name => Valid ? WorldFate!.Name.TextValue : null;
 
 	[LuaDoc("The current progress of this FATE towards its completion, as a percentage.")]
-	public byte? Progress => this.Exists ? this.WorldFate!.Progress! : null;
+	public byte? Progress => Exists ? WorldFate!.Progress! : null;
 
 	#endregion
 
@@ -42,10 +42,10 @@ public sealed record class FateWrapper(Fate? WorldFate): IWorldObjectWrapper {
 
 	[LuaDoc("The (minimum) level of this FATE. You are recommended to be at least this level to participate.",
 		"If you are below this level, the game weighs your contribution less, and combat is expected to be much harder.")]
-	public byte? MinLevel => this.Valid ? this.WorldFate!.Level! : null;
+	public byte? MinLevel => Valid ? WorldFate!.Level! : null;
 
 	[LuaDoc("The maximum level of this FATE, above which you need to manually level sync down in order to participate.")]
-	public unsafe byte? MaxLevel => this.Valid ? this.Struct->MaxLevel : null;
+	public unsafe byte? MaxLevel => Valid ? Struct->MaxLevel : null;
 
 	#endregion
 
@@ -53,15 +53,15 @@ public sealed record class FateWrapper(Fate? WorldFate): IWorldObjectWrapper {
 
 	[LuaDoc("The total duration of this FATE, in seconds.",
 		"If this FATE has already ended, this will be `nil`.")]
-	public int? Duration => this.Valid ? this.WorldFate!.Duration : null;
+	public int? Duration => Valid ? WorldFate!.Duration : null;
 
 	[LuaDoc("The remaining time to complete this FATE, in seconds.",
 		"If this FATE has not yet started, this will be equal to `.Duration`.",
 		"If this FATE has already ended, this will be `nil`.")]
-	public int? TimeLeft => this.Valid
-		? this.State switch {
-			FateState.Preparation => this.Duration,
-			FateState.Running or FateState.WaitingForEnd => (int)this.WorldFate!.TimeRemaining,
+	public int? TimeLeft => Valid
+        ? State switch {
+			FateState.Preparation => Duration,
+			FateState.Running or FateState.WaitingForEnd => (int)WorldFate!.TimeRemaining,
 			FateState.Ended or FateState.Failed => 0,
 			_ => null,
 		}
@@ -71,26 +71,26 @@ public sealed record class FateWrapper(Fate? WorldFate): IWorldObjectWrapper {
 		"This is functionally equivalent to `.Duration - .TimeLeft`.",
 		"If this FATE has not yet started, this will be `0`.",
 		"If this FATE has already ended, this will be equal to `.Duration`.")]
-	public int? TimeElapsed => this.Duration is int total && this.TimeLeft is int left ? total - left : null;
+	public int? TimeElapsed => Duration is int total && TimeLeft is int left ? total - left : null;
 
 	#endregion
 
 	#region States
 
 	[MoonSharpHidden]
-	public FateState State => this.Valid ? this.WorldFate!.State : FateState.Ended;
+	public FateState State => Valid ? WorldFate!.State : FateState.Ended;
 
 	[LuaDoc("Whether this FATE is in the preparation phase, before it is actually started.")]
-	public bool Waiting => this.State is FateState.Preparation;
+	public bool Waiting => State is FateState.Preparation;
 
 	[LuaDoc("Whether this FATE is currently running.")]
-	public bool Running => this.State is FateState.Running;
+	public bool Running => State is FateState.Running;
 
 	[LuaDoc("Whether this FATE is currently in its ending phase, as seen in item turnin FATEs.")]
-	public bool Ending => this.State is FateState.WaitingForEnd;
+	public bool Ending => State is FateState.WaitingForEnd;
 
 	[LuaDoc("Whether this FATE is considered \"active\", either waiting to be started or currently in progress.")]
-	public bool Active => this.State is FateState.Preparation or FateState.Running;
+	public bool Active => State is FateState.Preparation or FateState.Running;
 
 	#endregion
 
@@ -100,34 +100,34 @@ public sealed record class FateWrapper(Fate? WorldFate): IWorldObjectWrapper {
 
 	[LuaPlayerDoc("The raw (internal) X coordinate of this FATE.",
 		"This represents the east/west position.")]
-	public float? PosX => this.Exists ? this.WorldFate!.Position.X : null;
+	public float? PosX => Exists ? WorldFate!.Position.X : null;
 
 	[LuaPlayerDoc("The raw (internal) Y coordinate of this FATE.",
 		"This represents the north/south position.",
 		"Please note that this is _actually_ the internal _Z_ coordinate, since the game engine uses X/Z for horizontal position and Y for vertical.",
 		"For the sake of consistency with the map coordinates displayed to the player, " + Plugin.Name + " swaps them.")]
-	public float? PosY => this.Exists ? this.WorldFate!.Position.Z : null;
+	public float? PosY => Exists ? WorldFate!.Position.Z : null;
 
 	[LuaPlayerDoc("The raw (internal) Z coordinate of this FATE.",
 		"This represents the vertical position.",
 		"Please note that this is _actually_ the internal _Y_ coordinate, since the game engine uses X/Z for horizontal position and Y for vertical.",
 		"For the sake of consistency with the map coordinates displayed to the player, " + Plugin.Name + " swaps them.")]
-	public float? PosZ => this.Exists ? this.WorldFate!.Position.Y : null;
+	public float? PosZ => Exists ? WorldFate!.Position.Y : null;
 
-	public WorldPosition Position => new(this.PosX, this.PosY, this.PosZ);
+	public WorldPosition Position => new(PosX, PosY, PosZ);
 
 	[LuaDoc("The player-friendly map-style X (east/west) coordinate of this FATE.")]
-	public float? MapX => this.Position.MapX;
+	public float? MapX => Position.MapX;
 	[LuaDoc("The player-friendly map-style Y (north/south) coordinate of this FATE.")]
-	public float? MapY => this.Position.MapY;
+	public float? MapY => Position.MapY;
 	[LuaDoc("The player-friendly map-style Z (height) coordinate of this FATE.")]
-	public float? MapZ => this.Position.MapZ;
+	public float? MapZ => Position.MapZ;
 
 	[LuaDoc("Provides three values consisting of this FATE's X (east/west), Y (north/south), and Z (vertical) coordinates.",
 		"If the FATE doesn't exist in the world (`.Exists == false`), all three values will be nil.")]
 	public DynValue MapCoords {
 		get {
-			Vector3? coords = this.Position.UiCoords;
+			Vector3? coords = Position.UiCoords;
 			return coords is not null
 				? DynValue.NewTuple(DynValue.NewNumber(coords.Value.X), DynValue.NewNumber(coords.Value.Y), DynValue.NewNumber(coords.Value.Z))
 				: DynValue.NewTuple(null, null, null);
@@ -137,7 +137,7 @@ public sealed record class FateWrapper(Fate? WorldFate): IWorldObjectWrapper {
 	[LuaDoc("The radius of this FATE.",
 		"FATEs are defined as cylinders, with their position being the central point at the bottom.",
 		"This is the maximum (horizontal) distance you can be from the middle of it.")]
-	public unsafe float? Radius => this.Valid ? this.Struct->Radius : null;
+	public unsafe float? Radius => Valid ? Struct->Radius : null;
 
 	#endregion
 
@@ -145,28 +145,28 @@ public sealed record class FateWrapper(Fate? WorldFate): IWorldObjectWrapper {
 
 	[LuaDoc("The flat (horizontal only) distance between the player and the \"position\" of this FATE.",
 		"FATEs are defined as cylinders, with their position being the central point at the bottom.")]
-	public float? FlatDistanceToCenter => this.Exists
-		? this.Position.FlatDistance
+	public float? FlatDistanceToCenter => Exists
+        ? Position.FlatDistance
 		: null;
 	[SkipDoc("alternative spelling only")]
-	public float? FlatDistanceToCentre => this.FlatDistanceToCenter;
+	public float? FlatDistanceToCentre => FlatDistanceToCenter;
 
 	[LuaDoc("The three-dimensional distance between the player and the \"position\" of this FATE.",
 		"FATEs are defined as cylinders, with their position being the central point at the bottom.",
 		"Note that this means that if you're above a FATE, the distance to actually \"enter\" it is less than this would suggest.",
 		"However, you probably still need to go about that far in order to reach the ground where the objectives will be.")]
-	public float? DistanceToCenter => this.Exists
-		? this.Position.Distance
+	public float? DistanceToCenter => Exists
+        ? Position.Distance
 		: null;
 	[SkipDoc("alternative spelling only")]
-	public float? DistanceToCentre => this.DistanceToCenter;
+	public float? DistanceToCentre => DistanceToCenter;
 
 	[LuaDoc("The flat (horizontal only) distance between the player and the edge of this FATE.",
 		"This is calculated as the distance to the central point minus the radius.",
 		"If the player is currently within the FATE's (horizontal) bounds, this will be negative.",
 		"Note that FATEs are defined as cylinders, with their position being the central point at the bottom.",
 		"As a result, even if this is negative, the player may be above the FATE's bounds.")]
-	public float? FlatDistanceToEdge => this.FlatDistanceToCenter is float dist && this.Radius is float size ? dist - size : null;
+	public float? FlatDistanceToEdge => FlatDistanceToCenter is float dist && Radius is float size ? dist - size : null;
 
 	// There is no method for 3d edge distance, due to FATEs being cylinders and not being able to get their height.
 	// A calculation based on the distance to the centre minus the radius would be invalid,
@@ -176,7 +176,7 @@ public sealed record class FateWrapper(Fate? WorldFate): IWorldObjectWrapper {
 
 	[MoonSharpUserDataMetamethod(Metamethod.Stringify)]
 	[LuaDoc("Creates a string describing the FATE, including its name, state, minimum level, and maximum level.")]
-	public override string ToString() => this.Valid ? $"FATE[{this.Name ?? "<ERROR: UNKNOWN FATE>"} - {this.State}, {this.MinLevel}/{this.MaxLevel}]" : "FATE[invalid]";
+	public override string ToString() => Valid ? $"FATE[{Name ?? "<ERROR: UNKNOWN FATE>"} - {State}, {MinLevel}/{MaxLevel}]" : "FATE[invalid]";
 
 	#region Conversions
 

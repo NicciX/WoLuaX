@@ -2,12 +2,10 @@ using System.Diagnostics;
 using System.IO;
 
 using ImGuiNET;
-
 using WoLua.Lua;
+using WoLuaX.Lua.Docs;
 
-using WoLua.Lua.Docs;
-
-namespace WoLua.Ui;
+namespace WoLuaX.Ui;
 
 internal class MainWindow: BaseWindow {
 	public const ImGuiWindowFlags CreationFlags = ImGuiWindowFlags.None
@@ -20,17 +18,17 @@ internal class MainWindow: BaseWindow {
 	private bool experimentalPathNormalisation;
 
 	public MainWindow() : base($"{Plugin.Name} v{Service.Plugin.Version}##MainWindow", CreationFlags) {
-		this.SizeConstraints = new() {
+        SizeConstraints = new() {
 			MinimumSize = new(Width, 100),
 			MaximumSize = new(Width, 800),
 		};
-		this.basePath = Service.Configuration.BasePath;
-		this.directInvocationCommandPrefix = Service.Configuration.DirectInvocationCommandPrefix;
-		this.registerCommands = Service.Configuration.RegisterDirectCommands;
-		this.experimentalPathNormalisation = Service.Configuration.ExperimentalPathNormalisation;
+        basePath = Service.Configuration.BasePath;
+        directInvocationCommandPrefix = Service.Configuration.DirectInvocationCommandPrefix;
+        registerCommands = Service.Configuration.RegisterDirectCommands;
+        experimentalPathNormalisation = Service.Configuration.ExperimentalPathNormalisation;
 	}
 
-	public override void OnOpen() => this.basePath = Service.Configuration.BasePath;
+	public override void OnOpen() => basePath = Service.Configuration.BasePath;
 
 	public override void Draw() {
 		string
@@ -47,10 +45,10 @@ internal class MainWindow: BaseWindow {
 			exampleNormalisedScriptCall = $"{Plugin.Command} call {exampleNormalisedSlug}",
 			exampleNormalisedScriptCallPrefixed = $"{Plugin.Command} call {exampleNormalisedSlugPrefixed}",
 
-			exampleShortCall = $"/{this.directInvocationCommandPrefix}{exampleScriptSlug}",
-			exampleShortCallPrefixed = $"/{this.directInvocationCommandPrefix}{exampleScriptSlugPrefixed}",
-			exampleNormalisedShortCall = $"/{this.directInvocationCommandPrefix}{exampleNormalisedSlug}",
-			exampleNormalisedShortCallPrefixed = $"/{this.directInvocationCommandPrefix}{exampleNormalisedSlugPrefixed}",
+			exampleShortCall = $"/{directInvocationCommandPrefix}{exampleScriptSlug}",
+			exampleShortCallPrefixed = $"/{directInvocationCommandPrefix}{exampleScriptSlugPrefixed}",
+			exampleNormalisedShortCall = $"/{directInvocationCommandPrefix}{exampleNormalisedSlug}",
+			exampleNormalisedShortCallPrefixed = $"/{directInvocationCommandPrefix}{exampleNormalisedSlugPrefixed}",
 
 			exampleCall = Service.Configuration.RegisterDirectCommands
 				? exampleShortCall
@@ -111,9 +109,9 @@ internal class MainWindow: BaseWindow {
 
 			Textline("Base lua script folder:");
 			ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - (ImGui.CalcTextSize("Rescan").X + imguiPadding + imguiSpacing));
-			ImGui.InputTextWithHint("###BaseFolderPath", PluginConfiguration.Defaults.BasePath, ref this.basePath, byte.MaxValue);
+			ImGui.InputTextWithHint("###BaseFolderPath", PluginConfiguration.Defaults.BasePath, ref basePath, byte.MaxValue);
 			if (ImGui.IsItemDeactivatedAfterEdit()) {
-				Service.Configuration.BasePath = this.basePath;
+				Service.Configuration.BasePath = basePath;
 				Service.Configuration.Save();
 				Service.ScriptManager.Rescan();
 			}
@@ -127,8 +125,8 @@ internal class MainWindow: BaseWindow {
 			ImGui.EndDisabled();
 
 			Textline();
-			if (ImGui.Checkbox("Try to register direct commands for each script?###RegisterDirectCommands", ref this.registerCommands)) {
-				Service.Configuration.RegisterDirectCommands = this.registerCommands;
+			if (ImGui.Checkbox("Try to register direct commands for each script?###RegisterDirectCommands", ref registerCommands)) {
+				Service.Configuration.RegisterDirectCommands = registerCommands;
 				Service.Configuration.Save();
 				Service.ScriptManager.Rescan();
 			}
@@ -146,13 +144,13 @@ internal class MainWindow: BaseWindow {
 			Textline("Direct script command prefix:");
 			ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
 			ImGui.BeginDisabled(!Service.Configuration.RegisterDirectCommands);
-			if (ImGui.InputTextWithHint("###DirectInvocationCommandPrefix", PluginConfiguration.Defaults.DirectInvocationCommandPrefix, ref this.directInvocationCommandPrefix, byte.MaxValue))
-				this.directInvocationCommandPrefix = this.directInvocationCommandPrefix.Replace(" ", "");
+			if (ImGui.InputTextWithHint("###DirectInvocationCommandPrefix", PluginConfiguration.Defaults.DirectInvocationCommandPrefix, ref directInvocationCommandPrefix, byte.MaxValue))
+                directInvocationCommandPrefix = directInvocationCommandPrefix.Replace(" ", "");
 			ImGui.EndDisabled();
 			if (ImGui.IsItemDeactivatedAfterEdit()) {
-				if (string.IsNullOrWhiteSpace(this.directInvocationCommandPrefix))
-					this.directInvocationCommandPrefix = PluginConfiguration.Defaults.DirectInvocationCommandPrefix;
-				Service.Configuration.DirectInvocationCommandPrefix = this.directInvocationCommandPrefix;
+				if (string.IsNullOrWhiteSpace(directInvocationCommandPrefix))
+                    directInvocationCommandPrefix = PluginConfiguration.Defaults.DirectInvocationCommandPrefix;
+				Service.Configuration.DirectInvocationCommandPrefix = directInvocationCommandPrefix;
 				Service.Configuration.Save();
 				Service.ScriptManager.Rescan();
 			}
@@ -166,8 +164,8 @@ internal class MainWindow: BaseWindow {
 			ImGui.EndDisabled();
 
 			Textline();
-			if (ImGui.Checkbox("Enable experimental path normalisation?###ExperimentalPathNormalisation", ref this.experimentalPathNormalisation)) {
-				Service.Configuration.ExperimentalPathNormalisation = this.experimentalPathNormalisation;
+			if (ImGui.Checkbox("Enable experimental path normalisation?###ExperimentalPathNormalisation", ref experimentalPathNormalisation)) {
+				Service.Configuration.ExperimentalPathNormalisation = experimentalPathNormalisation;
 				Service.Configuration.Save();
 				Service.ScriptManager.Rescan();
 			}

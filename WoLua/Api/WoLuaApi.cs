@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 using Lumina.Excel.Sheets;
 
-namespace WoLua.Api;
+namespace WoLuaX.Api;
 
 public class WoLuaApi : IDisposable, IWoLuaApi
 {

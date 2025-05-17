@@ -6,9 +6,9 @@ using WoLua.Constants;
 using WoLua.Lua;
 
 using WoLua.Api;
-using WoLua.Lua.Api;
+using WoLuaX.Lua.Api;
 
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 public class ChatApi: ApiBase { // TODO luadoc all of this

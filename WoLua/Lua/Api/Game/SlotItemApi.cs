@@ -10,15 +10,15 @@ using System.Collections.Generic;
 using MoonSharp.Interpreter;
 using WoLua.Lua;
 
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 [MoonSharpUserData]
 public unsafe class SlotItemApi : ApiBase {
 	[MoonSharpHidden]
 	internal SlotItemApi(ScriptContainer source) : base(source) { }
 	
-	public bool Loaded => !this.Disposed
-		&& Service.ClientState.LocalPlayer is not null
+	public bool Loaded => !Disposed
+        && Service.ClientState.LocalPlayer is not null
 		&& Service.ClientState.LocalContentId is not 0;
 	public static implicit operator bool(SlotItemApi? player) => player?.Loaded ?? false;
 
@@ -36,7 +36,7 @@ public unsafe class SlotItemApi : ApiBase {
 	//public unsafe string? PName => this.Name;
 
 	public unsafe string SetName(string name) {
-		this.Name = name;
+        Name = name;
 		return name;
 	}
 
@@ -79,31 +79,31 @@ public unsafe class SlotItemApi : ApiBase {
 	}
 	//public new string Name { get; set; } = "SlotItem";
 
-	public unsafe int ItemSlot => GetSlot(this.Name!);
+	public unsafe int ItemSlot => GetSlot(Name!);
 
-	public unsafe uint StorageSlot => DstSlot(this.Name!);	
+	public unsafe uint StorageSlot => DstSlot(Name!);	
 
 	//public unsafe uint Slot => GetSlot(this.Name);
-	public unsafe uint Item => InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(this.ItemSlot)->ItemId != 0
-		? InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(this.ItemSlot)->ItemId : 0;
-	public unsafe uint DyeIdA => InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(this.ItemSlot)->GetStain(0);	
-	public unsafe string DyeA => this.stain.GetRow(this.DyeIdA).Name.ToString();
-	public unsafe uint DyeIdB => InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(this.ItemSlot)->GetStain(1);
-	public unsafe string DyeB => this.stain.GetRow(this.DyeIdB).Name.ToString();
-	public unsafe uint GlamId => InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(this.ItemSlot)->GlamourId;
+	public unsafe uint Item => InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(ItemSlot)->ItemId != 0
+		? InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(ItemSlot)->ItemId : 0;
+	public unsafe uint DyeIdA => InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(ItemSlot)->GetStain(0);	
+	public unsafe string DyeA => stain.GetRow(DyeIdA).Name.ToString();
+	public unsafe uint DyeIdB => InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(ItemSlot)->GetStain(1);
+	public unsafe string DyeB => stain.GetRow(DyeIdB).Name.ToString();
+	public unsafe uint GlamId => InventoryManager.Instance()->GetInventoryContainer(InventoryType.EquippedItems)->GetInventorySlot(ItemSlot)->GlamourId;
 
-	public unsafe string? ItemName => Service.DataManager.GetExcelSheet<Item>()!.GetRow(this.Item).Name.ExtractText();
-	public unsafe string? GlamName => Service.DataManager.GetExcelSheet<Item>()!.GetRow(this.GlamId).Name.ExtractText();
+	public unsafe string? ItemName => Service.DataManager.GetExcelSheet<Item>()!.GetRow(Item).Name.ExtractText();
+	public unsafe string? GlamName => Service.DataManager.GetExcelSheet<Item>()!.GetRow(GlamId).Name.ExtractText();
 	//public unsafe void Remove() => this.invHandler.MoveItemToContainer(this.Item, 1000, this.StorageSlot);
 
 	public unsafe string Remove() {
-		if (this.Item > 0) {
+		if (Item > 0) {
 			uint pInv = 1000;
-			uint dstSlot = this.StorageSlot;
-			this.invHandler.MoveItemToContainer(this.Item, pInv, dstSlot);
-			return $"Removed {this.ItemName}.";
+			uint dstSlot = StorageSlot;
+            invHandler.MoveItemToContainer(Item, pInv, dstSlot);
+			return $"Removed {ItemName}.";
 		}
-		return $"Unable to remove {this.ItemName}.";
+		return $"Unable to remove {ItemName}.";
 	}
 
 

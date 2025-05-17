@@ -1,4 +1,4 @@
-namespace WoLua.Lua.Api.Game;
+namespace WoLuaX.Lua.Api.Game;
 
 public interface IWorldObjectWrapper {
 	public bool Exists { get; }

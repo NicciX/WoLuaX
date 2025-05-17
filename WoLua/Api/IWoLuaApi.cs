@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 
-namespace WoLua.Api;
+namespace WoLuaX.Api;
 
 public interface IWoLuaApi
 {

@@ -1,6 +1,6 @@
 using Dalamud.Game.Text.SeStringHandling.Payloads;
 
-namespace WoLua.Ui.Chat;
+namespace WoLuaX.Ui.Chat;
 
 public static class Foreground {
 	public static readonly UIForegroundPayload
