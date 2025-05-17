@@ -7,7 +7,7 @@
 		<Copyright>Copyleft VariableVixen 2022</Copyright>
 		<LangVersion>preview</LangVersion>
 		<TargetFramework>net9.0-windows</TargetFramework>
-		<Platforms>x64</Platforms>
+		<Platforms>x64;AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
