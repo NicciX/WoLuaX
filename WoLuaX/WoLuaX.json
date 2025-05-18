@@ -2,7 +2,7 @@
   "Author": "VariableVixen, NicciX",
   "Name": "WoLuaX",
   "InternalName": "WoLuaX",
-  "AssemblyVersion": "3.9.0",
+  "AssemblyVersion": "3.9.0.1",
   "Description": "Write custom chat commands by creating lua scripts",
   "ApplicableVersion": "any",
   "RepoUrl": "https://github.com/NicciX/WoLuaX",
