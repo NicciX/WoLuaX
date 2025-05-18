@@ -18,12 +18,12 @@ public class WoLuaIpc : IDisposable {
 	private readonly ICallGateProvider<string, string, string, string, bool> updateChat;
 
 	public WoLuaIpc() {
-        cgIsAvailable = Service.Interface.GetIpcProvider<bool>("WoLua.IsAvailable");
+        cgIsAvailable = Service.Interface.GetIpcProvider<bool>("WoLuaX.IsAvailable");
         cgIsAvailable.RegisterFunc(IsAvailable);
         //_getItemInfoProvider = Service.Interface.GetIpcProvider<uint, HashSet<(uint npcId, uint territory, (float x, float y))>?>("ItemVendorLocation.GetItemVendors");
         //_pluginLog = pluginLog;
 
-        updateChat = Service.Interface.GetIpcProvider<string, string, string, string, bool>("WoLua.UpdateChat");
+        updateChat = Service.Interface.GetIpcProvider<string, string, string, string, bool>("WoLuaX.UpdateChat");
         updateChat.RegisterFunc(UpdateChat);
 
         RegisterFunctions();
