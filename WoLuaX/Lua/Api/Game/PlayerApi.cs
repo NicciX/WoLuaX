@@ -364,8 +364,23 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 		: null;
 
 	//Added by Nicci ---------
-	
 
+	[LuaPlayerDoc("Whether the current character is between areas and still loading in.")]
+	public bool? BetweenAreas => Loaded
+		? Service.Condition[ConditionFlag.BetweenAreas]
+		: null;
+	public bool? BetweenAreas51 => Loaded
+		? Service.Condition[ConditionFlag.BetweenAreas51]
+		: null;
+
+	public bool? Occupied => Loaded
+		? Service.Condition[ConditionFlag.Occupied]
+		|| Service.Condition[ConditionFlag.Occupied33]
+		|| Service.Condition[ConditionFlag.Occupied30]
+		|| Service.Condition[ConditionFlag.Occupied39]
+		|| Service.Condition[ConditionFlag.OccupiedInCutSceneEvent]
+		|| Service.Condition[ConditionFlag.Occupied38]
+		: null;
 
 	[LuaPlayerDoc("Whether the current character is considered to be sitting.")]
 	public bool? Sitting => Loaded

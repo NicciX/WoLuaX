@@ -2,13 +2,20 @@
 <Project Sdk="Dalamud.NET.Sdk/12.0.2">
 	<PropertyGroup>
 		<Product>WoLuaX</Product>
-		<Version>3.9.0.1</Version>
+		<Version>3.9.0.3</Version>
 		<Description>Warrior of... Lua? Write your own chat commands in lua for FFXIV/Dalamud!</Description>
 		<Copyright>Copyleft VariableVixen 2022</Copyright>
 		<LangVersion>preview</LangVersion>
 		<TargetFramework>net9.0-windows</TargetFramework>
 		<Platforms>x64;AnyCPU</Platforms>
+		<PackageIcon>lips.png</PackageIcon>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Include="..\lips.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="ECommons" Version="2.0.0.4" />
