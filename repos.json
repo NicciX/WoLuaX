@@ -1,0 +1,23 @@
+[    
+    {
+        "Author": "VariableVixen, NicciX",
+        "Name": "WoLuaX",
+        "Description": "My custom version of WoLua for FFXIV.",
+        "InternalName": "WoLuaX",
+        "AssemblyVersion": "3.9.0.3",
+        "RepoUrl": "https://github.com/NicciX/WoLuaX",
+        "IconUrl": "https://raw.githubusercontent.com/NicciX/TurnipTime/refs/heads/main/Res/Mandragora_Genus_Icon.png",
+        "ApplicableVersion": "any",
+        "Tags": [
+			"jacks"
+		],
+        "DalamudApiLevel": 12,
+        "IsHide": false,
+        "IsTestingExclusive": false,
+        "DownloadLinkInstall": "https://github.com/NicciX/WoLuaX/releases/download/v3.9.0.3/latest.zip",
+        "DownloadLinkTesting": "https://github.com/NicciX/WoLuaX/releases/download/v3.9.0.3/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/NicciX/WoLuaX/releases/download/v3.9.0.3/latest.zip",
+        "DownloadCount": 0,
+        "LastUpdated": "1748101254"
+    }    
+]
