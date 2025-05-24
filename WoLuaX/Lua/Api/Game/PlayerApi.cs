@@ -373,13 +373,32 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 		? Service.Condition[ConditionFlag.BetweenAreas51]
 		: null;
 
+	public bool? OccupiedInQuestEvent => Loaded
+		? Service.Condition[ConditionFlag.OccupiedInQuestEvent]
+		: null;
+	public bool? OccupiedInCutSceneEvent => Loaded
+		? Service.Condition[ConditionFlag.OccupiedInCutSceneEvent]
+		: null;
 	public bool? Occupied => Loaded
 		? Service.Condition[ConditionFlag.Occupied]
-		|| Service.Condition[ConditionFlag.Occupied33]
-		|| Service.Condition[ConditionFlag.Occupied30]
-		|| Service.Condition[ConditionFlag.Occupied39]
-		|| Service.Condition[ConditionFlag.OccupiedInCutSceneEvent]
-		|| Service.Condition[ConditionFlag.Occupied38]
+		: null;
+
+	public bool? OccupiedInEvent => Loaded
+		? Service.Condition[ConditionFlag.OccupiedInEvent]
+		: null;
+	public bool? Occupied33 => Loaded
+		? Service.Condition[ConditionFlag.Occupied33]
+		: null;
+
+	public bool? Occupied30 => Loaded
+		? Service.Condition[ConditionFlag.Occupied30]
+		: null;
+
+	public bool? Occupied38 => Loaded
+		? Service.Condition[ConditionFlag.Occupied38]
+		: null;
+	public bool? Occupied39 => Loaded
+		? Service.Condition[ConditionFlag.Occupied39]
 		: null;
 
 	[LuaPlayerDoc("Whether the current character is considered to be sitting.")]
@@ -404,6 +423,10 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 	public bool? RolePlaying => Loaded
         ? Service.Condition[ConditionFlag.RolePlaying]
 		: null;
+	public string? WoluaXVersion => Loaded
+		? Service.Plugin.Version
+		: null;
+
 	[LuaPlayerDoc("Whether the current character is in the Duty Queue.")]
 	public bool? InDutyQueue => Loaded
         ? Service.Condition[ConditionFlag.InDutyQueue]
