@@ -4,7 +4,7 @@
         "Name": "WoLuaX",
         "Description": "My custom version of WoLua for FFXIV.",
         "InternalName": "WoLuaX",
-        "AssemblyVersion": "3.9.0.4,
+        "AssemblyVersion": "3.9.0.4",
         "RepoUrl": "https://github.com/NicciX/WoLuaX",
         "IconUrl": "https://raw.githubusercontent.com/NicciX/TurnipTime/refs/heads/main/Res/Mandragora_Genus_Icon.png",
         "ApplicableVersion": "any",
