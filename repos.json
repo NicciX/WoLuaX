@@ -14,10 +14,10 @@
         "DalamudApiLevel": 12,
         "IsHide": false,
         "IsTestingExclusive": false,
-        "DownloadLinkInstall": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.3/latest.zip",
-        "DownloadLinkTesting": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.3/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.3/latest.zip",
+        "DownloadLinkInstall": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.3-alpha4/latest.zip",
+        "DownloadLinkTesting": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.3-alpha4/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.3-alpha4/latest.zip",
         "DownloadCount": 0,
-        "LastUpdated": "1748101254"
+        "LastUpdated": "1748104156"
     }    
 ]
