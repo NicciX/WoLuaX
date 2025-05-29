@@ -11,17 +11,17 @@ namespace WoLuaX.Lua.Actions;
 public class CallbackAction: ScriptAction {
 	public DynValue Function { get; }
 	private readonly DynValue[] arguments;
-	public ReadOnlyCollection<DynValue> Arguments => Array.AsReadOnly(arguments);
+	public ReadOnlyCollection<DynValue> Arguments => Array.AsReadOnly(this.arguments);
 
 	public CallbackAction(DynValue callback, params DynValue[] arguments) {
-        Function = callback;
+        this.Function = callback;
 		this.arguments = arguments;
 	}
 
 	protected override void Process(ScriptContainer script) {
-		script.Log(ApiBase.ToUsefulString(Function), LogTag.ActionCallback);
+		script.Log(ApiBase.ToUsefulString(this.Function), LogTag.ActionCallback);
 		try {
-			script.Engine.Call(Function, arguments);
+			script.Engine.Call(this.Function, this.arguments);
 		}
 		catch (ArgumentException e) {
 			Service.Plugin.Error("Error in queued callback function", e, script.PrettyName);
@@ -29,5 +29,5 @@ public class CallbackAction: ScriptAction {
 	}
 
 	public override string ToString()
-		=> $"Invoke: {ApiBase.ToUsefulString(Function, true)}";
+		=> $"Invoke: {ApiBase.ToUsefulString(this.Function, true)}";
 }

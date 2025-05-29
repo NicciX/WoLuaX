@@ -18,22 +18,22 @@ public class WoLuaIpc : IDisposable {
 	private readonly ICallGateProvider<string, string, string, string, bool> updateChat;
 
 	public WoLuaIpc() {
-        cgIsAvailable = Service.Interface.GetIpcProvider<bool>("WoLuaX.IsAvailable");
-        cgIsAvailable.RegisterFunc(IsAvailable);
-        //_getItemInfoProvider = Service.Interface.GetIpcProvider<uint, HashSet<(uint npcId, uint territory, (float x, float y))>?>("ItemVendorLocation.GetItemVendors");
-        //_pluginLog = pluginLog;
+        this.cgIsAvailable = Service.Interface.GetIpcProvider<bool>("WoLuaX.IsAvailable");
+		this.cgIsAvailable.RegisterFunc(this.IsAvailable);
+		//_getItemInfoProvider = Service.Interface.GetIpcProvider<uint, HashSet<(uint npcId, uint territory, (float x, float y))>?>("ItemVendorLocation.GetItemVendors");
+		//_pluginLog = pluginLog;
 
-        updateChat = Service.Interface.GetIpcProvider<string, string, string, string, bool>("WoLuaX.UpdateChat");
-        updateChat.RegisterFunc(UpdateChat);
+		this.updateChat = Service.Interface.GetIpcProvider<string, string, string, string, bool>("WoLuaX.UpdateChat");
+		this.updateChat.RegisterFunc(this.UpdateChat);
 
-        RegisterFunctions();
+		this.RegisterFunctions();
 		Service.Log.Information($"New Chat: Api Call");
-        isAvailable = true;
-        cgIsAvailable.SendMessage();
+		this.isAvailable = true;
+		this.cgIsAvailable.SendMessage();
 	}
 	public bool IsAvailable() {
 		Service.Log.Information($"New Chat: Api Call2");
-		return isAvailable;
+		return this.isAvailable;
 	}
 	private bool UpdateChat(
 		string msg,
@@ -57,8 +57,8 @@ public class WoLuaIpc : IDisposable {
 	}
 
 	public void RegisterFunctions() {
-        //this.updateChat = Service.Interface.GetIpcProvider<string, string, string, bool>("WoLua.UpdateChat");
-        updateChat.RegisterFunc(UpdateChat);
+		//this.updateChat = Service.Interface.GetIpcProvider<string, string, string, bool>("WoLua.UpdateChat");
+		this.updateChat.RegisterFunc(this.UpdateChat);
 		//_getItemInfoProvider.RegisterFunc(GetItemVendors);
 		Service.Log.Information($"New Chat: Api Call2");
 	}
@@ -71,6 +71,7 @@ public class WoLuaIpc : IDisposable {
 		WoLuaApi.Stamp = (uint)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 		Service.Log.Information($"ChatMatch Received: [{chn}] : [{sender}] : {msg}");
 		Service.Log.Information($"ChatMatch Received :: Match: {match}");
+		Service.ServerChat.SendMessage($"/.emo poke {WoLuaApi.Stamp}");
 		return true;
 	}
 

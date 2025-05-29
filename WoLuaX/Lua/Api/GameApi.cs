@@ -177,12 +177,6 @@ public class GameApi: ApiBase {
 	[LuaDoc("Returns an object holding the current Eorzean time as separate hours and minutes.")]
 	public EorzeanTime EorzeanTime => new();
 
-
-	//public string LastChat => WoLuaApi.LastChat;
-	//public string LastSender => WoLuaApi.LastSender;
-	//public string LastChn => WoLuaApi.LastChn;
-	//public uint LastTime => WoLuaApi.LastTime;
-
 	[LuaDoc("Returns a wrapper for the current weather in the current zone.",
 		"This wrapper provides the raw (internal) numeric (unsigned integer) ID of the weather, the short name, and a small description of what the weather \"looks\" like.")]
 	public unsafe WeatherWrapper Weather {

@@ -13,9 +13,14 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-
+using FFXIVClientStructs.FFXIV.Client.Game.Control;
+using FFXIVClientStructs.FFXIV.Common.Math;
+using FFXIVClientStructs.FFXIV.Component.Excel;
 using Lumina.Excel;
 using Lumina.Excel.Sheets;
+using Lumina.Text.ReadOnly;
+using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
+
 
 using MoonSharp.Interpreter;
 
@@ -373,6 +378,18 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 		? Service.Condition[ConditionFlag.BetweenAreas51]
 		: null;
 
+	public bool? PlayingMiniGame => Loaded
+		? Service.Condition[ConditionFlag.PlayingMiniGame]
+		: null;
+
+	public bool? WaitingForDutyFinder => Loaded
+		? Service.Condition[ConditionFlag.WaitingForDutyFinder]
+		: null;
+
+	public bool? UsingParasol => Loaded
+		? Service.Condition[ConditionFlag.UsingFashionAccessory]
+		: null;
+
 	public bool? OccupiedInQuestEvent => Loaded
 		? Service.Condition[ConditionFlag.OccupiedInQuestEvent]
 		: null;
@@ -445,6 +462,16 @@ public class PlayerApi: ApiBase, IWorldObjectWrapper {
 	[LuaPlayerDoc("Whether the current character is waiting for duty.")]
 	public bool? WfDuty => Loaded
         ? Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 25 : null;
+
+	public unsafe GrandCompany GetGrandCompany() => (GrandCompany)PlayerState.Instance()->GrandCompany;
+
+	public string? GrandCompany => Loaded
+		? this.GetGrandCompany().GetHashCode() switch {
+			1 => "Maelstrom",
+			2 => "Order of the Twin Adder",
+			3 => "Immortal Flames",
+			_ => "None"
+		} : null;
 
 	public bool? IsPvP => Loaded
         ? Service.ClientState.LocalPlayer!.OnlineStatus.RowId == 13 : null;

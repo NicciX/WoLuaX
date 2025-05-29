@@ -2,11 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
-using Dalamud.Plugin.Services;
-
 using MoonSharp.Interpreter;
 
-using WoLuaX.Lua;
 using WoLuaX.Constants;
 using WoLuaX.Lua.Actions;
 
@@ -20,58 +17,58 @@ public class ActionQueue: IDisposable {
 	public ScriptContainer Script { get; private set; }
 
 	public ActionQueue(ScriptContainer source) {
-        Script = source;
-		Service.Framework.Update += tick;
+        this.Script = source;
+		Service.Framework.Update += this.tick;
 	}
 
-	public int Count => queue.Count;
+	public int Count => this.queue.Count;
 
 	internal void Clear()
-		=> queue.Clear();
+		=> this.queue.Clear();
 	internal void Add(ScriptAction action)
-		=> queue.Enqueue(action);
+		=> this.queue.Enqueue(action);
 
 	public bool? PullEvent() {
 		if (!Service.ClientState.IsLoggedIn || Service.GameLifecycle.LogoutToken.IsCancellationRequested || Service.GameLifecycle.DalamudUnloadingToken.IsCancellationRequested || Service.GameLifecycle.GameShuttingDownToken.IsCancellationRequested) {
-            Clear();
+			this.Clear();
 			return null;
 		}
-		if (DateTime.Now < ActionThreshold)
+		if (DateTime.Now < this.ActionThreshold)
 			return null;
-		if (!queue.TryDequeue(out ScriptAction? action))
+		if (!this.queue.TryDequeue(out ScriptAction? action))
 			return false;
-        Script.Log(action.ToString(), LogTag.ActionQueue);
-		action.Run(Script);
+		this.Script.Log(action.ToString(), LogTag.ActionQueue);
+		action.Run(this.Script);
 		return true;
 	}
 
-	private void tick(IFramework framework) => PullEvent();
+	private void tick(IFramework framework) => this.PullEvent();
 
 	#region IDisposable
 	private bool disposed = false;
 
 	protected virtual void Dispose(bool disposing) {
-		if (disposed)
+		if (this.disposed)
 			return;
-        disposed = true;
+		this.disposed = true;
 
 		if (disposing) {
-			Service.Framework.Update -= tick;
-            Clear();
+			Service.Framework.Update -= this.tick;
+			this.Clear();
 		}
 
-        Script.Log(GetType().Name, LogTag.Dispose, true);
+		this.Script.Log(this.GetType().Name, LogTag.Dispose, true);
 
-        Script = null!;
+		this.Script = null!;
 	}
 
 	~ActionQueue() {
-        Dispose(false);
+		this.Dispose(false);
 	}
 
 	[MoonSharpHidden]
 	public void Dispose() {
-        Dispose(true);
+		this.Dispose(true);
 		GC.SuppressFinalize(this);
 	}
 	#endregion
