@@ -9,7 +9,11 @@
         "IconUrl": "https://raw.githubusercontent.com/NicciX/TurnipTime/refs/heads/main/Res/Mandragora_Genus_Icon.png",
         "ApplicableVersion": "any",
         "Tags": [
-			"jacks"
+			"jacks",
+			"emotes",
+			"automation",
+			"lua",
+			"scripts"
 		],
         "DalamudApiLevel": 12,
         "IsHide": false,
@@ -18,6 +22,6 @@
         "DownloadLinkTesting": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.41/latest.zip",
         "DownloadLinkUpdate": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.41/latest.zip",
         "DownloadCount": 0,
-        "LastUpdated": "1748105136"
+        "LastUpdated": "1748578169"
     }    
 ]
