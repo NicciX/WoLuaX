@@ -8,11 +8,11 @@
   "RepoUrl": "https://github.com/NicciX/WoLuaX",
   "IconUrl": "..//lips.png",
   "Tags": [
-	"jacks",
-	"emotes",
-	"automation",
-	"lua",
-	"scripts"
+"jacks",
+"emotes",
+"automation",
+"lua",
+"scripts"
 	],
   "DalamudApiLevel": 12,
   "LoadRequiredState": 0,
