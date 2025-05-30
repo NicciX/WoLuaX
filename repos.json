@@ -4,7 +4,7 @@
         "Name": "WoLuaX",
         "Description": "My custom version of WoLua for FFXIV.",
         "InternalName": "WoLuaX",
-        "AssemblyVersion": "3.9.0.4",
+        "AssemblyVersion": "3.9.0.41",
         "RepoUrl": "https://github.com/NicciX/WoLuaX",
         "IconUrl": "https://raw.githubusercontent.com/NicciX/TurnipTime/refs/heads/main/Res/Mandragora_Genus_Icon.png",
         "ApplicableVersion": "any",
@@ -14,9 +14,9 @@
         "DalamudApiLevel": 12,
         "IsHide": false,
         "IsTestingExclusive": false,
-        "DownloadLinkInstall": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.4/latest.zip",
-        "DownloadLinkTesting": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.4/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.4/latest.zip",
+        "DownloadLinkInstall": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.41/latest.zip",
+        "DownloadLinkTesting": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.41/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/NicciX/WoLuaX/releases/download/WoLuaX-v3.9.0.41/latest.zip",
         "DownloadCount": 0,
         "LastUpdated": "1748105136"
     }    
