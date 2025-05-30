@@ -6,7 +6,7 @@
         "InternalName": "WoLuaX",
         "AssemblyVersion": "3.9.0.41",
         "RepoUrl": "https://github.com/NicciX/WoLuaX",
-        "IconUrl": "https://raw.githubusercontent.com/NicciX/TurnipTime/refs/heads/main/Res/Mandragora_Genus_Icon.png",
+        "IconUrl": "https://github.com/NicciX/WoLuaX/blob/master/lips.png",
         "ApplicableVersion": "any",
         "Tags": ["jacks","emotes","automation","lua","scripts"],
         "DalamudApiLevel": 12,
