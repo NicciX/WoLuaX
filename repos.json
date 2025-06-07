@@ -4,7 +4,7 @@
         "Name": "WoLuaX",
         "Description": "My custom version of WoLua for FFXIV.",
         "InternalName": "WoLuaX",
-        "AssemblyVersion": "3.9.0.41",
+        "AssemblyVersion": "3.9.0.47",
         "RepoUrl": "https://github.com/NicciX/WoLuaX",
         "IconUrl": "https://github.com/NicciX/WoLuaX/blob/master/lips.png",
         "ApplicableVersion": "any",
@@ -12,10 +12,10 @@
         "DalamudApiLevel": 12,
         "IsHide": false,
         "IsTestingExclusive": false,
-        "DownloadLinkInstall": "https://github.com/NicciX/WoLuaX/releases/download/3.9.0.41/latest.zip",
-        "DownloadLinkTesting": "https://github.com/NicciX/WoLuaX/releases/download/3.9.0.41/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NicciX/WoLuaX/releases/download/3.9.0.41/latest.zip",
+        "DownloadLinkInstall": "https://github.com/NicciX/WoLuaX/releases/download/3.9.0.47/latest.zip",
+        "DownloadLinkTesting": "https://github.com/NicciX/WoLuaX/releases/download/3.9.0.47/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/NicciX/WoLuaX/releases/download/3.9.0.47/latest.zip",
         "DownloadCount": 0,
-        "LastUpdated": "1748582135"
+        "LastUpdated": "1749308906"
     }    
 ]
